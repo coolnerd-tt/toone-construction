@@ -41,11 +41,26 @@ TEAL_BG  = HexColor('#1A3840')
 W, H = letter
 CONTENT_W = 6.6 * inch  # 0.7" margins each side
 
-BASE = "/Users/tylertoone/Desktop/Claude Work/inbox/excavating-site"
-JONES_LOGO   = os.path.join(BASE, "jones-assets/jones-logo.png")
-CALLUS_LOGO  = os.path.join(BASE, "callus-logo-concepts/callus-logo-hz.png")
+import json
 
-OUTPUT = os.path.join(BASE, "outputs/toone_proposal.pdf")
+# ── TENANT CONFIG ─────────────────────────────────────────────────────────────
+# All per-client values live in tenant.json. To re-skin for a new prospect,
+# edit that file and re-run this script.
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+with open(os.path.join(BASE, 'tenant.json'), 'r', encoding='utf-8') as _f:
+    TENANT = json.load(_f)
+
+COMPANY      = TENANT['company']
+PRICING      = TENANT['pricing']
+COMPS        = TENANT['comp_set']
+META         = TENANT['proposal_meta']
+
+LOGO_PATH    = os.path.join(BASE, 'assets/logo/toone-logo.png')   # placeholder OK if missing
+OUTPUT       = os.path.join(BASE, 'outputs', f"{COMPANY['short_name'].lower().replace(' ', '_')}_proposal.pdf")
+
+# Legacy aliases kept while we restructure the dual-brand sections — Phase 3 will remove these
+JONES_LOGO   = LOGO_PATH
+CALLUS_LOGO  = LOGO_PATH
 
 # ── STYLES ─────────────────────────────────────────────────────────────────────
 def S(name, **kw):
