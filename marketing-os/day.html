@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Marketing Operating System — A Day in the Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0C0E10;
+    --panel: #161A1D;
+    --panel-2: #1F2428;
+    --panel-3: #262B30;
+    --border: #2A2F33;
+    --text: #F4F2EE;
+    --muted: #8A8880;
+    --orange: #E8621A;     /* foreman */
+    --teal: #3D9BAD;       /* office manager */
+    --amber: #F5A623;      /* owner */
+    --red: #D9534F;
+    --green: #6FB65A;
+    --spark: #D93B18;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    padding: 60px 24px 80px;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(48px, 7vw, 92px);
+    font-weight: 900;
+    line-height: 0.95;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  h1 em { font-style: normal; color: var(--orange); }
+  .lede {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 820px;
+    margin-bottom: 40px;
+  }
+  .lede strong { color: var(--text); font-weight: 500; }
+
+  /* ── PERSONA STRIP ──────────────────────────────────────── */
+  .personas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+  .persona {
+    background: var(--panel);
+    border-left: 3px solid var(--orange);
+    padding: 22px 24px;
+  }
+  .persona.teal  { border-left-color: var(--teal); }
+  .persona.amber { border-left-color: var(--amber); }
+  .persona .role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 10px;
+  }
+  .persona.teal .role  { color: var(--teal); }
+  .persona.amber .role { color: var(--amber); }
+  .persona .name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .persona .who {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .persona .surface {
+    font-size: 13.5px;
+    margin-bottom: 12px;
+  }
+  .persona .time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+    letter-spacing: 0.06em;
+  }
+  .persona .time strong { color: var(--text); font-weight: 500; }
+
+  @media (max-width: 800px) {
+    .personas { grid-template-columns: 1fr; }
+  }
+
+  /* ── TIMELINE ────────────────────────────────────────── */
+  h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    margin-top: 24px;
+  }
+  h2 em { font-style: normal; color: var(--orange); }
+
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+    border-left: 2px solid var(--border);
+  }
+  .day-marker {
+    margin: 32px 0 18px -52px;
+    padding: 8px 18px;
+    background: var(--orange);
+    color: var(--bg);
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .day-marker.wed { background: var(--teal); }
+  .day-marker.thu { background: var(--amber); }
+  .day-marker.fri { background: var(--green); }
+
+  .event {
+    position: relative;
+    padding: 18px 0 28px 0;
+  }
+  .event::before {
+    content: '';
+    position: absolute;
+    left: -47px;
+    top: 28px;
+    width: 12px; height: 12px;
+    background: var(--orange);
+    border: 2px solid var(--bg);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--orange);
+  }
+  .event.teal::before  { background: var(--teal);  box-shadow: 0 0 0 2px var(--teal); }
+  .event.amber::before { background: var(--amber); box-shadow: 0 0 0 2px var(--amber); }
+  .event.system::before{ background: var(--muted); box-shadow: 0 0 0 2px var(--muted); }
+  .event.green::before { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+
+  .event .ts {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .event.teal  .ts { color: var(--teal); }
+  .event.amber .ts { color: var(--amber); }
+  .event.system .ts { color: var(--muted); }
+  .event.green .ts { color: var(--green); }
+
+  .event .who-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    background: rgba(232,98,26,0.12);
+    color: var(--orange);
+    padding: 3px 8px;
+    margin-left: 8px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .event.teal  .who-tag { background: rgba(61,155,173,0.12); color: var(--teal); }
+  .event.amber .who-tag { background: rgba(245,166,35,0.12); color: var(--amber); }
+  .event.system .who-tag { background: rgba(138,136,128,0.12); color: var(--muted); }
+  .event.green .who-tag { background: rgba(111,182,90,0.12); color: var(--green); }
+
+  .event h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 0.005em;
+  }
+  .event p { font-size: 14px; color: var(--text); margin-bottom: 8px; }
+  .event p.muted { color: var(--muted); font-size: 13px; }
+
+  /* ── DEVICE MOCKUPS ─────────────────────────────────────── */
+  .device-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    margin-top: 12px;
+    align-items: start;
+  }
+
+  /* iPhone-style SMS bubble */
+  .iphone {
+    width: 280px;
+    background: #1B1F24;
+    border: 1px solid #34393E;
+    border-radius: 28px;
+    padding: 32px 16px 20px;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  }
+  .iphone::before {
+    content: '';
+    position: absolute;
+    top: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 80px; height: 4px;
+    background: #2A2F33;
+    border-radius: 2px;
+  }
+  .iphone .contact {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .sms-bubble {
+    background: #2C7BFF;
+    color: white;
+    padding: 9px 13px;
+    border-radius: 16px 16px 4px 16px;
+    font-size: 13px;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    margin-left: 28px;
+  }
+  .sms-bubble.received {
+    background: #2A2F33;
+    color: var(--text);
+    border-radius: 16px 16px 16px 4px;
+    margin-left: 0;
+    margin-right: 28px;
+  }
+  .sms-photos {
+    display: flex;
+    gap: 4px;
+    margin-left: 28px;
+    margin-bottom: 8px;
+  }
+  .sms-photo {
+    flex: 1;
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #3a4045, #25292d);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .sms-meta {
+    text-align: center;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* Laptop / Queue UI mockup */
+  .laptop {
+    flex: 1;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .laptop .titlebar {
+    background: var(--panel-2);
+    padding: 8px 12px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .laptop .titlebar .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .laptop .titlebar .dot.r { background: #FF5F56; }
+  .laptop .titlebar .dot.y { background: #FFBD2E; }
+  .laptop .titlebar .dot.g { background: #27C93F; }
+  .laptop .titlebar .url {
+    margin-left: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .laptop .body { padding: 18px 20px; }
+
+  .queue-row {
+    background: var(--panel-2);
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    border-left: 2px solid var(--orange);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .queue-row.teal { border-left-color: var(--teal); }
+  .queue-row.spark { border-left-color: var(--spark); }
+  .queue-row.amber { border-left-color: var(--amber); }
+  .queue-row.approved { opacity: 0.5; border-left-color: var(--green); }
+  .queue-row .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+  .queue-row.teal .tag { color: var(--teal); }
+  .queue-row.spark .tag { color: var(--spark); }
+  .queue-row.amber .tag { color: var(--amber); }
+  .queue-row.approved .tag { color: var(--green); }
+  .queue-row .lbl { font-size: 12.5px; flex-grow: 1; }
+  .queue-row .mini-btn {
+    background: var(--green);
+    color: var(--bg);
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Email mockup */
+  .email {
+    background: white;
+    color: #222;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .email .e-head {
+    padding: 12px 16px;
+    background: #f6f6f4;
+    border-bottom: 1px solid #e5e5e1;
+    font-size: 11px;
+    color: #666;
+  }
+  .email .e-head .from { color: #222; font-weight: 600; }
+  .email .e-body { padding: 18px 22px; font-size: 13.5px; line-height: 1.6; }
+  .email .e-body h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    color: var(--orange);
+  }
+  .email .e-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 14px 0;
+    padding: 12px;
+    background: #faf9f6;
+    border-radius: 4px;
+  }
+  .email .e-stats .s { text-align: center; }
+  .email .e-stats .num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 26px;
+    color: #222;
+    line-height: 1;
+  }
+  .email .e-stats .lbl {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #888;
+    margin-top: 4px;
+  }
+
+  /* Notification card */
+  .notif {
+    background: var(--panel-2);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 10px;
+    border-left: 3px solid var(--red);
+  }
+  .notif.amber { border-left-color: var(--amber); }
+  .notif.green { border-left-color: var(--green); }
+  .notif .ico {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    background: var(--orange);
+    color: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .notif.amber .ico { background: var(--amber); }
+  .notif.green .ico { background: var(--green); }
+  .notif .nb {
+    font-size: 12px;
+  }
+  .notif .nb .t {
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: var(--text);
+  }
+  .notif .nb .s { color: var(--muted); }
+
+  @media (max-width: 800px) {
+    .device-row { grid-template-columns: 1fr; }
+    .iphone { width: 100%; max-width: 320px; margin: 0 auto; }
+  }
+
+  /* ── SUMMARY ────────────────────────────────────────────── */
+  .summary {
+    background: var(--panel);
+    padding: 36px;
+    margin-top: 60px;
+    border-left: 3px solid var(--orange);
+  }
+  .summary h2 { margin: 0 0 14px 0; font-size: 32px; }
+  .summary p { color: var(--muted); margin-bottom: 12px; font-size: 14px; }
+  .summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-top: 20px;
+  }
+  .summary-stat {
+    background: var(--panel-2);
+    padding: 20px;
+    border-left: 2px solid var(--orange);
+    text-align: center;
+  }
+  .summary-stat:nth-child(2) { border-left-color: var(--teal); }
+  .summary-stat:nth-child(3) { border-left-color: var(--amber); }
+  .summary-stat:nth-child(4) { border-left-color: var(--green); }
+  .summary-stat .n {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 38px;
+    line-height: 1;
+    color: var(--orange);
+    margin-bottom: 6px;
+  }
+  .summary-stat:nth-child(2) .n { color: var(--teal); }
+  .summary-stat:nth-child(3) .n { color: var(--amber); }
+  .summary-stat:nth-child(4) .n { color: var(--green); }
+  .summary-stat .l {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+
+  .footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer a { color: var(--orange); text-decoration: none; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">Marketing Operating System · A Day in the Life · v4</div>
+    <h1>One foreman.<br/>One office manager.<br/><em>Five published artifacts.</em></h1>
+    <p class="lede">
+      The day-to-day reality of operating the Marketing Operating System, told through one Tuesday afternoon
+      pour at Spring Creek Commerce Pad. <strong>Foreman</strong> never logs in.
+      <strong>Office manager</strong> spends 15 minutes with her morning coffee.
+      <strong>Owner</strong> is invisible to the system except when judgment is needed.
+    </p>
+
+    <!-- ═══ PERSONA STRIP ═══════════════════════════════════════ -->
+    <div class="personas">
+      <div class="persona">
+        <div class="role">Persona 01</div>
+        <div class="name">Foreman</div>
+        <div class="who">Tony, Manny, the crew leads</div>
+        <div class="surface">
+          <strong>Surface:</strong> the phone they already have. One contact saved as
+          "Jones Marketing." Texts a number when something good happens. That's it —
+          no app, no login, no portal.
+        </div>
+        <div class="time">Daily commitment: <strong>~15 sec / event</strong></div>
+      </div>
+      <div class="persona teal">
+        <div class="role">Persona 02</div>
+        <div class="name">Office manager</div>
+        <div class="who">Linda, or whoever runs the front office</div>
+        <div class="surface">
+          <strong>Surface:</strong> a bookmarked web app. Inbox-style queue of pending
+          drafts (field intakes, review replies, lead auto-replies, SEO pages).
+          Edit / approve / reject. That's the whole interface.
+        </div>
+        <div class="time">Daily commitment: <strong>~15 min / day</strong></div>
+      </div>
+      <div class="persona amber">
+        <div class="role">Persona 03</div>
+        <div class="name">Owner</div>
+        <div class="who">Steve, Aaron — leadership</div>
+        <div class="surface">
+          <strong>Surface:</strong> push notifications + Friday digest email.
+          Pulled in only on 1-2★ reviews, hot leads, and once-weekly performance.
+          Almost never logs into the system itself.
+        </div>
+        <div class="time">Daily commitment: <strong>~30 sec / week</strong></div>
+      </div>
+    </div>
+
+    <h2>Tuesday <em>·</em> 4:47 PM <em>·</em> Spring Creek wraps</h2>
+
+    <!-- ═══ TIMELINE ═══════════════════════════════════════════ -->
+    <div class="timeline">
+
+      <div class="day-marker">Tuesday</div>
+
+      <!-- Tuesday 4:47:00 PM -->
+      <div class="event">
+        <div class="ts">04:47:00 PM <span class="who-tag">Foreman · Tony</span></div>
+        <h3>Tony texts the Jones number from the cab</h3>
+        <p>Pour's done. Crew is wrapping up. Tony pulls his phone out of his vest pocket, opens Messages, types two sentences, attaches three jobsite photos, hits send. Goes back to walking the pad.</p>
+        <div class="device-row">
+          <div class="iphone">
+            <div class="contact">Jones Marketing &middot; (801) 555-0123</div>
+            <div class="sms-bubble">
+              Wrapped the dirt phase at Spring Creek today. 18k yards, cut-fill balanced, no haul-off. Two weather days but we held grade.
+            </div>
+            <div class="sms-photos">
+              <div class="sms-photo">IMG_8821</div>
+              <div class="sms-photo">IMG_8822</div>
+              <div class="sms-photo">IMG_8823</div>
+            </div>
+            <div class="sms-meta">Delivered &middot; 4:47 PM</div>
+          </div>
+          <div style="padding:16px;font-size:13.5px;color:var(--muted)">
+            <p style="margin-bottom:8px"><strong style="color:var(--text)">Tony's total time invested: 18 seconds.</strong></p>
+            <p style="margin-bottom:8px">No app to download. No password to remember. The Jones Marketing number is saved in his contacts — same as the office line, the dispatch line, the equipment yard.</p>
+            <p>If he doesn't text, nothing happens. No nag emails, no "you missed your daily post" reminders. The system only fires when the field reports something worth reporting.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tuesday 4:47:03 PM -->
+      <div class="event system">
+        <div class="ts">04:47:03 PM <span class="who-tag">System · Twilio webhook</span></div>
+        <h3>OS receives the text + photos</h3>
+        <p class="muted">Twilio fires the inbound webhook to the Marketing Operating System. Photos are pulled into media storage. The Field-to-Content agent is dispatched with Tony's text + photo references + tenant config (Jones brand voice).</p>
+      </div>
+
+      <!-- Tuesday 4:47:09 PM -->
+      <div class="event system">
+        <div class="ts">04:47:09 PM <span class="who-tag">System · Field-to-Content agent</span></div>
+        <h3>Agent generates 5 channel-specific drafts</h3>
+        <p class="muted">~6 seconds of agent runtime. LinkedIn post, Google Business post, Instagram caption, blog snippet, internal newsletter blurb — all in Jones voice. Drafts land in the approval queue.</p>
+      </div>
+
+      <!-- Tuesday 4:47:11 PM -->
+      <div class="event teal">
+        <div class="ts">04:47:11 PM <span class="who-tag">Office mgr · Linda</span></div>
+        <h3>Linda gets a Slack notification (optional)</h3>
+        <p>Linda's at home making dinner. Slack pings her phone, she glances at it, decides it can wait until morning. The drafts aren't going anywhere. The notification respects her after-hours boundary — no one publishes anything overnight unless she clicks approve.</p>
+        <div class="notif amber">
+          <div class="ico">M</div>
+          <div class="nb">
+            <div class="t">Marketing Operating System &middot; now</div>
+            <div class="s">1 new field intake from Tony &mdash; Spring Creek Commerce Pad. 5 drafts ready for review.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-marker wed">Wednesday</div>
+
+      <!-- Wed 8:15 AM -->
+      <div class="event teal">
+        <div class="ts">08:15 AM <span class="who-tag">Office mgr · Linda</span></div>
+        <h3>Linda opens the queue with her coffee</h3>
+        <p>Bookmarked URL → loads in two seconds. The queue shows everything that hit overnight: Tony's field intake from yesterday, two new Google reviews, four contact-form submissions, and a monthly SEO content draft that fired at 6am on a cron.</p>
+        <div class="device-row">
+          <div></div>
+          <div class="laptop">
+            <div class="titlebar">
+              <div class="dot r"></div>
+              <div class="dot y"></div>
+              <div class="dot g"></div>
+              <div class="url">queue.jones.marketing-os.com</div>
+            </div>
+            <div class="body">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--muted);margin-bottom:14px">8 PENDING &middot; SORTED BY URGENCY</div>
+              <div class="queue-row">
+                <span class="tag">FIELD INTAKE</span>
+                <span class="lbl">Spring Creek Commerce Pad &mdash; 5 drafts</span>
+                <span class="mini-btn">Open</span>
+              </div>
+              <div class="queue-row teal">
+                <span class="tag">REVIEW REPLY</span>
+                <span class="lbl">3★ from Brent M. &mdash; communication complaint</span>
+                <span class="mini-btn">Open</span>
+              </div>
+              <div class="queue-row teal">
+                <span class="tag">REVIEW REPLY</span>
+                <span class="lbl">5★ from Cassidy L. &mdash; subdivision win</span>
+                <span class="mini-btn">Open</span>
+              </div>
+              <div class="queue-row amber">
+                <span class="tag">LEAD &middot; HOT</span>
+                <span class="lbl">Mobile weld Tooele &mdash; routed to Marco</span>
+                <span class="mini-btn">View</span>
+              </div>
+              <div class="queue-row amber">
+                <span class="tag">LEAD</span>
+                <span class="lbl">Holladay Builders &mdash; subdivision bid</span>
+                <span class="mini-btn">Open</span>
+              </div>
+              <div class="queue-row spark">
+                <span class="tag">SEO PAGE</span>
+                <span class="lbl">Service area: excavation Salt Lake</span>
+                <span class="mini-btn">Open</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wed 8:18 AM -->
+      <div class="event teal">
+        <div class="ts">08:18 AM <span class="who-tag">Office mgr · Linda</span></div>
+        <h3>Spring Creek &mdash; reviewed and approved in 3 minutes</h3>
+        <p>Linda opens the field intake. Reads the 5 generated drafts. Tweaks one line on the LinkedIn post (changes "the crew" to "Tony's crew"). Hits "Approve all 5." Drafts go into the publish queue with cadence-aware scheduling.</p>
+        <p class="muted">She does not need to remember when LinkedIn engagement peaks (9:30am Wed) or that GBP posts auto-expire after 7 days. The publish layer handles all of it.</p>
+      </div>
+
+      <!-- Wed 8:25 AM -->
+      <div class="event teal">
+        <div class="ts">08:25 AM <span class="who-tag">Office mgr · Linda</span></div>
+        <h3>Reviews + leads + SEO page processed</h3>
+        <p>Linda taps through the rest:</p>
+        <p>· 5★ review from Cassidy → approve as-drafted (it's already perfect)<br/>
+           · 3★ from Brent → small edit; she rewords "tighten up" to "do better"; approve<br/>
+           · Hot Tooele lead → already auto-routed to Marco yesterday; she marks it acknowledged<br/>
+           · Holladay Builders lead → reviews the auto-reply; approves; routes to Aaron for follow-up<br/>
+           · Two spam leads → discard<br/>
+           · SEO page → reviews the rendered preview, dictates a small addition via the mic, publishes</p>
+        <p class="muted"><strong style="color:var(--text)">Linda's total time: 8 minutes 32 seconds. Done before her second cup.</strong></p>
+      </div>
+
+      <!-- Wed 9:30 AM -->
+      <div class="event green">
+        <div class="ts">09:30 AM <span class="who-tag">System · Publish · LinkedIn</span></div>
+        <h3>Spring Creek post goes live on LinkedIn</h3>
+        <p>Scheduled for the Wednesday 9:30am peak engagement window for Utah B2B (the OS knows this from the tenant's posting-cadence config, which we tune monthly).</p>
+        <div class="device-row">
+          <div></div>
+          <div style="background:var(--panel);border-radius:8px;border:1px solid var(--border);padding:18px 22px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+              <div style="width:36px;height:36px;border-radius:50%;background:var(--orange);color:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:800;font-family:'Barlow Condensed',sans-serif">J</div>
+              <div>
+                <div style="font-weight:600;font-size:13.5px">Toone Construction Co.</div>
+                <div style="font-size:11.5px;color:var(--muted)">79 followers gained this month &middot; 9:30 AM &middot; 🌍</div>
+              </div>
+            </div>
+            <p style="font-size:13.5px;line-height:1.55;margin-bottom:10px">Wrapped mass excavation on Spring Creek Commerce Pad in Spanish Fork, Utah County this week — roughly 18,000 cubic yards moved, cut-fill balanced on site, no haul-off. Tony's crew kept the pad on grade through two days of weather that wanted otherwise. Thanks to the GC for keeping the schedule honest. On to subgrade next week. Since 1990.</p>
+            <div style="color:var(--orange);font-size:12.5px;margin-bottom:14px">#HeavyCivil #UtahConstruction #SiteWork</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted);padding-top:10px;border-top:1px solid var(--border);letter-spacing:0.06em">820 IMPRESSIONS · 47 ENGAGEMENTS · 3 LINKS CLICKED</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wed 11:00 AM -->
+      <div class="event green">
+        <div class="ts">11:00 AM <span class="who-tag">System · Publish · GBP</span></div>
+        <h3>Same story, GBP post goes live on Google Business</h3>
+        <p class="muted">Customer-facing voice, friendlier close, "Get quote" CTA wired in. GBP posts auto-expire after 7 days, so the publisher schedules the next batch automatically.</p>
+      </div>
+
+      <!-- Wed 1:23 PM (a 3-star comes in mid-day) -->
+      <div class="event">
+        <div class="ts">01:23 PM <span class="who-tag">Customer · Brent M.</span></div>
+        <h3>3★ Google review hits</h3>
+        <p class="muted">Reputation agent sees it within the hour. Drafts a measured tier-3 reply. Flags an internal note for Steve. Drops in Linda's queue for tomorrow morning.</p>
+      </div>
+
+      <!-- Wed 4:42 PM (hot lead) -->
+      <div class="event amber">
+        <div class="ts">04:42 PM <span class="who-tag">Owner · Aaron + Marco</span></div>
+        <h3>Hot mobile-weld inquiry hits — owner notification fires</h3>
+        <p>Lead Triage agent classifies the contact form submission as a hot fab inquiry (plant in Tooele, same-day request). Auto-replies to the customer. Sends Marco an SMS. Notifies Aaron via Slack so estimating knows it's in motion.</p>
+        <div style="max-width:480px;margin-top:8px">
+          <div class="notif">
+            <div class="ico" style="background:var(--red)">!</div>
+            <div class="nb">
+              <div class="t">Marketing Operating System &middot; HOT lead</div>
+              <div class="s">Mobile weld inquiry · Tooele plant · same-day. Auto-replied to customer. Marco notified via SMS. Suggested action: Marco to call within 30 min.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wed 6:00 PM (Instagram) -->
+      <div class="event green">
+        <div class="ts">06:00 PM <span class="who-tag">System · Publish · Instagram</span></div>
+        <h3>Instagram + Facebook cross-post goes live</h3>
+        <p class="muted">Punchy caption, geo-tagged Spanish Fork, hashtag bank picked from Jones tenant config. Cross-posted to Facebook automatically. Linda doesn't lift a finger.</p>
+      </div>
+
+      <div class="day-marker thu">Thursday</div>
+
+      <!-- Thu 7:30 AM -->
+      <div class="event teal">
+        <div class="ts">07:30 AM <span class="who-tag">Office mgr · Linda</span></div>
+        <h3>Morning batch: 4 minutes</h3>
+        <p>Linda processes overnight: the 3★ review reply (approves with a small tweak), three new contact form submissions (one route to estimating, two spam discards), and confirms yesterday's hot Tooele lead converted — Marco called the plant, got the work, the conveyor's getting welded today.</p>
+      </div>
+
+      <!-- Thu 11:00 AM -->
+      <div class="event green">
+        <div class="ts">11:00 AM <span class="who-tag">System · Publish · Reply</span></div>
+        <h3>3★ reply posts to Brent's review</h3>
+        <p class="muted">Linda's edit ("do better" instead of "tighten up") goes live as the public reply. Steve gets a one-line FYI in Slack since the review named him for callback.</p>
+      </div>
+
+      <div class="day-marker fri">Friday</div>
+
+      <!-- Fri 7:00 AM -->
+      <div class="event amber">
+        <div class="ts">07:00 AM <span class="who-tag">Owner · Steve</span></div>
+        <h3>Steve gets the weekly digest</h3>
+        <p>Steve reads it on his phone with morning coffee. Doesn't open the OS. Doesn't need to.</p>
+        <div style="margin-top:8px;max-width:560px">
+          <div class="email">
+            <div class="e-head">
+              <div><span class="from">Marketing Operating System &lt;weekly@jones.marketing-os.com&gt;</span></div>
+              <div>To: Steve, Aaron · Fri, Apr 24 · 7:00 AM · Subject: Toone Construction &mdash; Week 17 digest</div>
+            </div>
+            <div class="e-body">
+              <h4>Week 17 &mdash; Apr 21 to Apr 25</h4>
+              <p>The OS handled it. Here's the picture:</p>
+              <div class="e-stats">
+                <div class="s"><div class="num">12</div><div class="lbl">Posts<br/>published</div></div>
+                <div class="s"><div class="num">7</div><div class="lbl">Reviews<br/>replied to</div></div>
+                <div class="s"><div class="num">4</div><div class="lbl">Hot leads<br/>routed</div></div>
+                <div class="s"><div class="num">2</div><div class="lbl">SEO pages<br/>shipped</div></div>
+              </div>
+              <p style="font-size:13px;color:#555"><strong>Top post of the week:</strong> Spring Creek Commerce Pad &mdash; 820 impressions, 47 engagements, 3 links clicked. Tony's crew, Tuesday afternoon.</p>
+              <p style="font-size:13px;color:#555"><strong>Notable lead:</strong> Tooele plant — Marco took the call same-day, got the work. Estimated $4,200 in mobile welding revenue.</p>
+              <p style="font-size:13px;color:#555"><strong>Linda's time this week:</strong> 1 hr 12 min total across 5 sessions.</p>
+              <p style="margin-top:14px;font-size:12px;color:#888">No action required. Open the dashboard if you want full details.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.timeline -->
+
+    <!-- ═══ SUMMARY ═══════════════════════════════════════════ -->
+    <div class="summary">
+      <h2>What that week actually cost — in human time</h2>
+      <p>Across one week, with one full-cycle event traced (Tuesday's Spring Creek pour), one 3★ review, one hot fab lead converted, one weekly digest, and the standard cadence of background posts:</p>
+      <div class="summary-stats">
+        <div class="summary-stat">
+          <div class="n">~3 min</div>
+          <div class="l">FOREMAN total<br/>(per event)</div>
+        </div>
+        <div class="summary-stat">
+          <div class="n">1h 12m</div>
+          <div class="l">OFFICE MANAGER<br/>(weekly)</div>
+        </div>
+        <div class="summary-stat">
+          <div class="n">~1 min</div>
+          <div class="l">OWNER<br/>(weekly digest)</div>
+        </div>
+        <div class="summary-stat">
+          <div class="n">12</div>
+          <div class="l">PUBLISHED<br/>artifacts</div>
+        </div>
+      </div>
+      <p style="margin-top:24px"><strong style="color:var(--text)">Compare to the alternative.</strong> A part-time marketing coordinator at $50–70K/year fully loaded. An agency at $1,500–3,000/month. Or — the most common outcome — nothing posts at all because the foreman is busy and the office manager has a hundred other things to do.</p>
+      <p>The Marketing Operating System doesn't try to replace good marketing thinking. It removes the labor of executing on it.</p>
+    </div>
+
+    <div class="footer">
+      <div>Marketing Operating System · Day in the Life · v5 · May 2026<br/>&copy; 2026&nbsp; JTC Communications &amp; Consulting, LLC and Coolnerd, LLC</div>
+      <div>
+        <a href="marketing-os-mock.html">← Try the live mock</a>
+        &nbsp;·&nbsp;
+        <a href="marketing-os-diagram.html">Architecture</a>
+        &nbsp;·&nbsp;
+        <a href="landing.html">Back to proposal</a>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

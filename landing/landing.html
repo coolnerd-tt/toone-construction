@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toone Construction — Two Concepts, One Vision</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0E0D0C;
+      --surface:     #161412;
+      --card:        #1A1816;
+      --border:      #2A2622;
+      --gold:        #C9963A;
+      --gold-light:  #E8B86D;
+      --text:        #F4F0EB;
+      --muted:       #8A8480;
+      --faint:       #3A3630;
+
+      /* Jones */
+      --jones-bg:    #0C0E10;
+      --jones-orange:#E8621A;
+      --jones-amber: #F5A623;
+      --jones-light: #F4F2EE;
+
+      /* Callus Kintsugi */
+      --kin-bg:      #0A0908;
+      --kin-gold:    #D4A94A;
+      --kin-bright:  #F0D870;
+      --kin-cream:   #F7F4EF;
+
+      /* Callus Spark */
+      --spark-bg:    #111111;
+      --spark-red:   #D93B18;
+      --spark-amber: #F5A020;
+      --spark-gray:  #8A8888;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── HEADER ───────────────────────────────────────────── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(14, 13, 12, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .site-header .wordmark {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+    .site-header .wordmark span { color: var(--gold); }
+    .site-header .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .site-header .nav-links a {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.18s ease;
+    }
+    .site-header .nav-links a:hover { color: var(--gold); }
+    .site-header .badge {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--faint);
+      padding: 4px 12px;
+      border-radius: 2px;
+    }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .hero {
+      padding: 100px 40px 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--gold);
+    }
+    .hero-title {
+      font-family: 'Barlow Condensed', 'Oswald', 'Inter', sans-serif;
+      font-size: clamp(48px, 8vw, 96px);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: 0.005em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: #E8621A;
+    }
+    .hero-sub {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--muted);
+      max-width: 620px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .hero-meta {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--faint);
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      margin-top: 32px;
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .hero-meta span { color: var(--muted); }
+
+    /* ── SECTION LABEL ────────────────────────────────────── */
+    .section-label {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .section-label span {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .section-label hr {
+      flex: 1;
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── CARDS GRID ───────────────────────────────────────── */
+    .cards-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    /* ── CONCEPT CARD ─────────────────────────────────────── */
+    .concept-card {
+      display: block;
+      text-decoration: none;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--card);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+      position: relative;
+    }
+    .concept-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+    }
+
+    /* Card preview panel */
+    .card-preview {
+      height: 420px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+    }
+
+    /* Jones preview */
+    .preview-jones {
+      background: var(--jones-bg);
+    }
+    .preview-jones::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 39px,
+          rgba(232, 98, 26, 0.04) 39px,
+          rgba(232, 98, 26, 0.04) 40px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 39px,
+          rgba(232, 98, 26, 0.04) 39px,
+          rgba(232, 98, 26, 0.04) 40px
+        );
+    }
+    .preview-jones::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 5px;
+      background: var(--jones-orange);
+    }
+    /* Jones wide background watermark logo */
+    .jones-watermark {
+      position: absolute;
+      left: -8%;
+      top: 50%;
+      transform: translateY(-52%);
+      width: 116%;
+      max-width: none;
+      opacity: 0.09;
+      filter: drop-shadow(0 0 18px rgba(232,98,26,0.4));
+      pointer-events: none;
+      z-index: 1;
+    }
+    .jones-amber-wash {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 40%, rgba(245,166,35,0.10) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    /* Kintsugi preview */
+    .preview-kintsugi {
+      background: var(--kin-bg);
+    }
+    .preview-kintsugi::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, transparent 30%, rgba(212,169,74,0.06) 50%, transparent 70%),
+        linear-gradient(45deg, transparent 20%, rgba(212,169,74,0.04) 40%, transparent 60%),
+        linear-gradient(165deg, transparent 40%, rgba(212,169,74,0.05) 60%, transparent 80%);
+    }
+    .preview-kintsugi .vein {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .preview-kintsugi .vein svg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0.20;
+    }
+    .preview-kintsugi::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 5px;
+      background: var(--kin-gold);
+    }
+
+    /* Spark preview */
+    .preview-spark {
+      background: linear-gradient(180deg, #1a1412 0%, #111111 100%);
+    }
+    .preview-spark::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 18px,
+          rgba(217, 59, 24, 0.035) 18px,
+          rgba(217, 59, 24, 0.035) 19px
+        );
+    }
+    .preview-spark::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 5px;
+      background: var(--spark-red);
+    }
+    .spark-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, rgba(217,59,24,0.18) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    /* Real logo mark slots (shared for Kintsugi + Spark) */
+    .logo-mark {
+      position: relative;
+      z-index: 2;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: flex-end;
+      min-height: 90px;
+    }
+    .logo-mark img {
+      display: block;
+      height: 90px;
+      width: auto;
+      max-width: 100%;
+    }
+    .logo-mark.kintsugi img {
+      filter: drop-shadow(0 0 28px rgba(212,169,74,0.35)) drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+    }
+    .logo-mark.spark img {
+      filter: drop-shadow(0 0 22px rgba(217,59,24,0.40)) drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+    }
+    /* Jones foreground logo sits inside card-preview-inner */
+    .jones-front-logo {
+      display: block;
+      height: 70px;
+      width: auto;
+      filter: drop-shadow(0 2px 10px rgba(0,0,0,0.55));
+      margin-bottom: 10px;
+    }
+
+    /* card preview inner content */
+    .card-preview-inner {
+      position: relative;
+      z-index: 2;
+    }
+    .card-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      font-weight: 700;
+      font-style: italic;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .tagline-jones   {
+      font-family: 'Barlow Condensed', 'Inter', sans-serif;
+      font-weight: 900;
+      font-style: normal;
+      font-size: 30px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #F4F2EE;
+    }
+    .tagline-kintsugi{ color: var(--kin-cream); }
+    .tagline-spark   {
+      font-family: 'Barlow Condensed', 'Inter', sans-serif;
+      font-weight: 900;
+      font-style: normal;
+      font-size: 30px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #F4F2F0;
+    }
+
+    /* color chips row */
+    .chips {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .chip {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+
+    /* hover arrow indicator */
+    .card-arrow {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      z-index: 3;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      background: rgba(0,0,0,0.25);
+    }
+    .concept-card:hover .card-arrow {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .card-arrow svg { fill: none; stroke: white; stroke-width: 1.5; }
+
+    /* Card meta section below preview */
+    .card-meta {
+      padding: 20px 24px 24px;
+      border-top: 1px solid var(--border);
+    }
+    .card-meta-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .label-jones    { color: var(--jones-orange); }
+    .label-kintsugi { color: var(--kin-gold); }
+    .label-spark    { color: var(--spark-red); }
+
+    .card-meta-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+    .card-meta-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── PROPOSAL SECTION ─────────────────────────────────── */
+    .proposal {
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      padding: 80px 40px 100px;
+    }
+    .proposal-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .proposal-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .proposal-eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--gold);
+    }
+    .proposal-title {
+      font-family: 'Barlow Condensed', 'Oswald', 'Inter', sans-serif;
+      font-size: clamp(40px, 6vw, 68px);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: 0.005em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .proposal-title em { font-style: normal; color: #E8621A; }
+    .proposal-sub {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 680px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+    .proposal-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px;
+      border-radius: 2px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: #0A0908;
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+    }
+    .btn-ghost {
+      border: 1px solid var(--faint);
+      color: var(--text);
+    }
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .btn svg { width: 14px; height: 14px; }
+
+    /* Chapter highlight cards */
+    .chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+    .chapter-card {
+      border: 1px solid var(--border);
+      background: var(--card);
+      padding: 18px 20px;
+      border-radius: 3px;
+    }
+    .chapter-num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .chapter-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+    .chapter-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* PDF embed */
+    .pdf-frame {
+      position: relative;
+      width: 100%;
+      height: 85vh;
+      min-height: 720px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      background: #222;
+    }
+    .pdf-frame iframe {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: 0;
+      background: #2a2a2a;
+    }
+    .pdf-fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      background: var(--card);
+    }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .footer-left {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .footer-left strong { color: var(--text); }
+    .footer-right {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────────── */
+    @media (max-width: 720px) {
+      .hero { padding: 60px 24px 56px; }
+      .cards-grid { padding: 0 24px 60px; grid-template-columns: 1fr; }
+      .section-label { padding: 0 24px 24px; }
+      .site-header { padding: 0 20px; }
+      .site-header .nav-links { display: none; }
+      .site-footer { padding: 32px 24px; }
+      .proposal { padding: 56px 24px 72px; }
+      .pdf-frame { height: 70vh; min-height: 520px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="wordmark">Jones <span>&times;</span> Callus</div>
+    <nav class="nav-links">
+      <a href="#concepts">Web Concepts</a>
+      <a href="#proposal">Proposal</a>
+      <a href="toone_proposal.pdf" target="_blank">PDF</a>
+    </nav>
+    <div class="badge">Confidential &middot; May 2026</div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Toone Construction Co. &times; </div>
+    <h1 class="hero-title">Two concepts.<br/><em>One vision.</em></h1>
+    <p class="hero-sub">
+      A dual-brand proposal for Toone Construction Co. and . Two Utah
+      companies, two distinct identities, one coordinated effort. Below are the
+      web concept directions built for your review, followed by the full strategic proposal.
+    </p>
+    <div class="hero-meta">
+      <div>Project <span>Dual-Brand Identity &amp; Web</span></div>
+      <div>Date <span>May 2026</span></div>
+      <div>Status <span>For Review</span></div>
+    </div>
+  </section>
+
+  <!-- SECTION LABEL -->
+  <div id="concepts" class="section-label">
+    <span>Web Concepts</span>
+    <hr />
+    <span>2 of 2</span>
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards-grid">
+
+    <!-- CARD 1: Toone Construction Co. -->
+    <a class="concept-card" href="../index.html">
+      <div class="card-preview preview-jones">
+        <div class="jones-amber-wash"></div>
+        <!-- wide background watermark logo -->
+        <img class="jones-watermark" src="../jones-assets/Jones-Logo.svg" alt="" aria-hidden="true" />
+
+        <!-- hover arrow -->
+        <div class="card-arrow">
+          <svg viewBox="0 0 16 16" width="14" height="14">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="card-preview-inner">
+          <div class="chips">
+            <div class="chip" style="background:#0C0E10;"></div>
+            <div class="chip" style="background:#E8621A;"></div>
+            <div class="chip" style="background:#F5A623;"></div>
+            <div class="chip" style="background:#F4F2EE;"></div>
+          </div>
+
+          <img class="jones-front-logo" src="../jones-assets/Jones-Logo.svg" alt="Toone Construction Co." />
+
+          <div class="card-tagline tagline-jones">"Built for the<br/>tough jobs."</div>
+        </div>
+      </div>
+      <div class="card-meta">
+        <div class="card-meta-label label-jones">Toone Construction Co. &middot; Brand Refresh + Web Concept</div>
+        <div class="card-meta-title">Toone Construction Co.</div>
+        <div class="card-meta-desc">Full homepage refresh for a Utah excavating company, trusted for 80 years. Brand refresh preserving the equity of the original logo.</div>
+      </div>
+    </a>
+
+    <!-- CARD 2:  · Spark -->
+    <a class="concept-card" href="callus-v3.html">
+      <div class="card-preview preview-spark">
+        <div class="spark-glow"></div>
+
+        <!-- hover arrow -->
+        <div class="card-arrow">
+          <svg viewBox="0 0 16 16" width="14" height="14">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="card-preview-inner">
+          <div class="chips">
+            <div class="chip" style="background:#111111;"></div>
+            <div class="chip" style="background:#D93B18;"></div>
+            <div class="chip" style="background:#F5A020;"></div>
+            <div class="chip" style="background:#8A8888;border-color:rgba(255,255,255,0.15);"></div>
+          </div>
+
+          <div class="logo-mark spark">
+            <img src="../callus-logo-concepts/callus-logo-hz.png" alt=" — Spark" />
+          </div>
+
+          <div class="card-tagline tagline-spark">"Built tough.<br/>Welded right."</div>
+        </div>
+      </div>
+      <div class="card-meta">
+        <div class="card-meta-label label-spark"> &middot; Spark Direction</div>
+        <div class="card-meta-title"></div>
+        <div class="card-meta-desc">Industrial badge direction. Heavy, gritty, built for the trade. Appeals to contractors who want to project strength.</div>
+      </div>
+    </a>
+
+  </div><!-- /.cards-grid -->
+
+  <!-- ═════ PROPOSAL SECTION ═════ -->
+  <section id="proposal" class="proposal">
+    <div class="proposal-inner">
+      <div class="proposal-eyebrow">Digital Proposal &middot; 2026</div>
+      <h2 class="proposal-title">Brand, web, SEO &amp;<br/><em>the complete digital engagement.</em></h2>
+      <p class="proposal-sub">
+        A 17-page strategy document covering brand, web, search visibility, social, the new
+        AI-driven <strong>Marketing Operating System</strong>, and a 90-day phased build plan for both Jones
+        Excavating Co. and , backed by Utah-specific competitive market
+        research.
+      </p>
+
+      <div class="proposal-actions">
+        <a class="btn btn-primary" href="toone_proposal.pdf" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PDF (v5)
+        </a>
+        <a class="btn btn-ghost" href="toone_one_pager.pdf" target="_blank" rel="noopener">
+          One-page summary
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="marketing-os-diagram.html" target="_blank" rel="noopener">
+          Marketing Operating System Diagram
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="marketing-os-mock.html" target="_blank" rel="noopener">
+          Try the live mock
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="marketing-os-day.html" target="_blank" rel="noopener">
+          A day in the life
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="marketing-os-sample.html" target="_blank" rel="noopener">
+          Static sample
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#proposal-embed">
+          View Inline
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+      </div>
+
+      <!-- Chapter overview (v3) -->
+      <div class="chapters-grid">
+        <div class="chapter-card">
+          <div class="chapter-num">01</div>
+          <div class="chapter-title">Executive Summary</div>
+          <div class="chapter-desc">Scope, outcomes, why now.</div>
+        </div>
+        <div class="chapter-card">
+          <div class="chapter-num">02</div>
+          <div class="chapter-title">The Opportunity</div>
+          <div class="chapter-desc">Market research: LinkedIn + Google Maps.</div>
+        </div>
+        <div class="chapter-card">
+          <div class="chapter-num">03</div>
+          <div class="chapter-title">Brand &amp; Web Strategy</div>
+          <div class="chapter-desc">Two brands, two sites, one team.</div>
+        </div>
+        <div class="chapter-card">
+          <div class="chapter-num">04</div>
+          <div class="chapter-title">SEO &amp; Local Search</div>
+          <div class="chapter-desc">Google Business Profile (GBP) overhaul, schema, citations.</div>
+        </div>
+        <div class="chapter-card">
+          <div class="chapter-num">05</div>
+          <div class="chapter-title">Social &amp; Content</div>
+          <div class="chapter-desc">LinkedIn first, with content engine.</div>
+        </div>
+        <div class="chapter-card">
+          <div class="chapter-num">06</div>
+          <div class="chapter-title">The Marketing Operating System</div>
+          <div class="chapter-desc">5 AI agents, one approval queue. An AI system you can manage.</div>
+        </div>
+        <div class="chapter-card">
+          <div class="chapter-num">07</div>
+          <div class="chapter-title">Investment &amp; Timeline</div>
+          <div class="chapter-desc">Fixed-price build, three-tier ongoing model.</div>
+        </div>
+        <div class="chapter-card">
+          <div class="chapter-num">08</div>
+          <div class="chapter-title">Next Steps</div>
+          <div class="chapter-desc">Approvals, kickoff, what we need from you.</div>
+        </div>
+      </div>
+
+      <!-- Inline PDF viewer -->
+      <div id="proposal-embed" class="pdf-frame">
+        <iframe
+          src="toone_proposal.pdf#view=FitH&amp;toolbar=1"
+          title="Toone Construction — Digital Proposal (PDF)"
+          loading="lazy"
+          allow="fullscreen"></iframe>
+        <noscript>
+          <div class="pdf-fallback">
+            <a class="btn btn-primary" href="toone_proposal.pdf" target="_blank" rel="noopener">Open Proposal PDF</a>
+          </div>
+        </noscript>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-left">
+      Prepared for <strong>Toone Construction Co.</strong> &amp; <strong></strong> &middot; Confidential, for internal review only.<br/>
+      &copy; 2026&nbsp; JTC Communications &amp; Consulting, LLC and Coolnerd, LLC
+    </div>
+    <div class="footer-right">May 2026</div>
+  </footer>
+
+</body>
+</html>

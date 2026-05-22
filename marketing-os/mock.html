@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Marketing Operating System — Interactive Mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0C0E10;
+    --panel: #161A1D;
+    --panel-2: #1F2428;
+    --panel-3: #262B30;
+    --border: #2A2F33;
+    --text: #F4F2EE;
+    --muted: #8A8880;
+    --faint: #4A4845;
+    --orange: #E8621A;
+    --amber: #F5A623;
+    --teal: #3D9BAD;
+    --spark: #D93B18;
+    --green: #6FB65A;
+    --red: #D9534F;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 14px;
+  }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  input, textarea, select { font-family: inherit; }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--panel);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .topbar .brand {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.005em;
+  }
+  .topbar .brand em { font-style: normal; color: var(--orange); }
+  .topbar .meta {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+  .topbar .meta .pulse {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 0 rgba(111,182,90,0.6);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(111,182,90,0.6); }
+    70% { box-shadow: 0 0 0 8px rgba(111,182,90,0); }
+    100% { box-shadow: 0 0 0 0 rgba(111,182,90,0); }
+  }
+  .topbar .reset {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+  }
+  .topbar .reset:hover { color: var(--red); border-color: var(--red); }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr 360px;
+    min-height: calc(100vh - 53px);
+  }
+  @media (max-width: 1100px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar, .rightbar { border: none !important; }
+  }
+
+  /* ── SIDEBAR ─────────────────────────────────────────── */
+  .sidebar {
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+  }
+  .sidebar .group {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 14px 24px 8px;
+  }
+  .sidebar .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 24px;
+    font-size: 13px;
+    color: var(--text);
+    border-left: 2px solid transparent;
+    transition: background 0.15s, border-color 0.15s;
+    width: 100%;
+    text-align: left;
+  }
+  .sidebar .nav-item:hover { background: var(--panel-2); }
+  .sidebar .nav-item.active {
+    background: var(--panel-2);
+    border-left-color: var(--orange);
+  }
+  .sidebar .nav-item .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--orange);
+  }
+  .sidebar .nav-item.teal .dot  { background: var(--teal); }
+  .sidebar .nav-item.spark .dot { background: var(--spark); }
+  .sidebar .nav-item.amber .dot { background: var(--amber); }
+  .sidebar .nav-item .badge {
+    margin-left: auto;
+    background: var(--panel-3);
+    color: var(--muted);
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+  .sidebar .nav-item.active .badge {
+    background: var(--orange);
+    color: var(--bg);
+  }
+
+  /* ── MAIN ───────────────────────────────────────────── */
+  .main { padding: 32px 40px; min-width: 0; }
+  .panel-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 36px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .panel-title em { font-style: normal; color: var(--orange); }
+  .panel-sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+
+  .scenario-card {
+    background: var(--panel);
+    border-left: 3px solid var(--orange);
+    padding: 18px 22px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .scenario-card:hover { background: var(--panel-2); transform: translateX(2px); }
+  .scenario-card.teal { border-left-color: var(--teal); }
+  .scenario-card.spark { border-left-color: var(--spark); }
+  .scenario-card.amber { border-left-color: var(--amber); }
+  .scenario-card .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .scenario-card.teal .label { color: var(--teal); }
+  .scenario-card.spark .label { color: var(--spark); }
+  .scenario-card.amber .label { color: var(--amber); }
+  .scenario-card .ttl {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .scenario-card .pre {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .custom-form {
+    background: var(--panel);
+    padding: 22px;
+    margin-top: 18px;
+    border-left: 3px solid var(--faint);
+  }
+  .custom-form label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .custom-form textarea, .custom-form input, .custom-form select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 12px;
+    font-size: 13.5px;
+    border-radius: 3px;
+    margin-bottom: 14px;
+    font-family: inherit;
+    resize: vertical;
+  }
+  .custom-form textarea:focus, .custom-form input:focus {
+    outline: none;
+    border-color: var(--orange);
+  }
+  .btn-primary {
+    background: var(--orange);
+    color: var(--bg);
+    padding: 11px 20px;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn-primary:hover { opacity: 0.92; }
+  .btn-primary:active { transform: translateY(1px); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-ghost {
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 9px 16px;
+    border-radius: 3px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+
+  /* ── PROCESSING ─────────────────────────────────────── */
+  .processing {
+    background: var(--panel);
+    border-left: 3px solid var(--amber);
+    padding: 22px;
+    margin: 18px 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .processing .spinner {
+    width: 24px; height: 24px;
+    border: 2px solid var(--border);
+    border-top-color: var(--amber);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .processing .step {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--amber);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── RIGHTBAR (queue) ───────────────────────────────── */
+  .rightbar {
+    background: var(--panel);
+    border-left: 1px solid var(--border);
+    padding: 24px;
+    overflow-y: auto;
+    max-height: calc(100vh - 53px);
+    position: sticky;
+    top: 53px;
+  }
+  .rightbar h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .rightbar .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .queue-item {
+    background: var(--panel-2);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-left: 2px solid var(--orange);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .queue-item:hover { background: var(--panel-3); }
+  .queue-item.teal { border-left-color: var(--teal); }
+  .queue-item.spark { border-left-color: var(--spark); }
+  .queue-item.amber { border-left-color: var(--amber); }
+  .queue-item.approved { opacity: 0.55; border-left-color: var(--green); }
+  .queue-item .qlabel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    color: var(--orange);
+    margin-bottom: 4px;
+  }
+  .queue-item.teal .qlabel { color: var(--teal); }
+  .queue-item.spark .qlabel { color: var(--spark); }
+  .queue-item.amber .qlabel { color: var(--amber); }
+  .queue-item.approved .qlabel { color: var(--green); }
+  .queue-item .qttl { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+  .queue-item .qsub { font-size: 11.5px; color: var(--muted); }
+  .empty-queue {
+    color: var(--muted);
+    font-size: 12.5px;
+    padding: 20px;
+    text-align: center;
+    font-style: italic;
+    background: var(--panel-2);
+    border: 1px dashed var(--border);
+  }
+
+  /* ── DRAFT DETAIL ───────────────────────────────────── */
+  .draft-section {
+    background: var(--panel);
+    margin-bottom: 14px;
+    border-left: 3px solid var(--orange);
+  }
+  .draft-section .ds-head {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .draft-section .ds-channel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    flex-grow: 1;
+  }
+  .draft-section.teal { border-left-color: var(--teal); }
+  .draft-section.spark { border-left-color: var(--spark); }
+  .draft-section.amber { border-left-color: var(--amber); }
+  .draft-section.green { border-left-color: var(--green); }
+  .draft-section.teal .ds-channel { color: var(--teal); }
+  .draft-section.spark .ds-channel { color: var(--spark); }
+  .draft-section.amber .ds-channel { color: var(--amber); }
+  .draft-section.green .ds-channel { color: var(--green); }
+
+  .ds-body { padding: 18px 20px; }
+  .ds-body textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 14px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    border-radius: 3px;
+    resize: vertical;
+    min-height: 70px;
+  }
+  .ds-body textarea:focus { outline: none; border-color: var(--orange); }
+  .ds-meta {
+    display: flex;
+    gap: 14px;
+    margin-top: 8px;
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+  .ds-actions {
+    padding: 12px 20px;
+    background: var(--panel-2);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .ds-actions .draft-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-right: auto;
+  }
+  .btn-approve {
+    background: var(--green);
+    color: var(--bg);
+    padding: 7px 16px;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .btn-reject {
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 7px 14px;
+    border-radius: 3px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .btn-reject:hover { color: var(--red); border-color: var(--red); }
+
+  .approve-all-bar {
+    background: var(--panel);
+    border-left: 3px solid var(--green);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .approve-all-bar .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--green);
+    flex-grow: 1;
+  }
+
+  /* ── PUBLISHED PREVIEWS ─────────────────────────────── */
+  .published-card {
+    background: var(--panel);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+  }
+  .pc-head {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--panel-2);
+  }
+  .pc-head .icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 13px;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+  .pc-head .who { font-weight: 600; font-size: 13px; }
+  .pc-head .when { color: var(--muted); font-size: 11.5px; margin-left: auto; }
+  .pc-body { padding: 14px 16px; font-size: 13.5px; line-height: 1.55; }
+  .pc-body .hashtags { color: var(--orange); margin-top: 8px; font-size: 12.5px; }
+  .pc-meta {
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.06em;
+  }
+
+  /* Tabs in main */
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tab {
+    padding: 10px 18px;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 2px solid transparent;
+  }
+  .tab.active {
+    color: var(--text);
+    border-bottom-color: var(--orange);
+  }
+
+  .empty {
+    background: var(--panel);
+    border: 1px dashed var(--border);
+    padding: 32px;
+    color: var(--muted);
+    text-align: center;
+    font-size: 13px;
+  }
+
+  .review-input {
+    background: var(--panel-2);
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+  }
+  .review-input .stars { color: var(--amber); font-size: 14px; letter-spacing: 0.1em; }
+  .review-input .who { font-size: 11.5px; color: var(--muted); margin: 4px 0 6px; }
+  .review-input .text { font-size: 13.5px; color: var(--text); }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--green);
+    color: var(--bg);
+    padding: 12px 22px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 100;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(-6px); }
+
+  .seo-page-preview {
+    background: white;
+    color: #1a1a1a;
+    padding: 28px 32px;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+  }
+  .seo-page-preview h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .seo-page-preview .meta-desc {
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+  }
+  .seo-page-preview h2 {
+    font-size: 16px;
+    color: #1a1a1a;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .seo-page-preview p { font-size: 13.5px; margin-bottom: 10px; line-height: 1.55; }
+
+  .footer-link {
+    display: block;
+    text-align: center;
+    padding: 18px;
+    color: var(--muted);
+    font-size: 12px;
+    text-decoration: none;
+    border-top: 1px solid var(--border);
+  }
+  .footer-link a { color: var(--orange); }
+
+  /* ── DICTATION ─────────────────────────────────────────── */
+  .ds-textarea-wrap { position: relative; }
+  .mic-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--panel-3);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    border: 1px solid var(--border);
+    z-index: 2;
+  }
+  .mic-btn:hover {
+    color: var(--orange);
+    border-color: var(--orange);
+    background: var(--panel);
+  }
+  .mic-btn.recording {
+    background: var(--red);
+    color: white;
+    border-color: var(--red);
+    box-shadow: 0 0 0 0 rgba(217,83,79,0.7);
+    animation: micPulse 1.4s infinite;
+  }
+  .mic-btn.recording:hover { background: var(--red); color: white; }
+  @keyframes micPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(217,83,79,0.6); }
+    70%  { box-shadow: 0 0 0 12px rgba(217,83,79,0); }
+    100% { box-shadow: 0 0 0 0 rgba(217,83,79,0); }
+  }
+  .mic-btn svg { width: 16px; height: 16px; }
+  .mic-btn[disabled] { opacity: 0.3; cursor: not-allowed; }
+
+  .live-transcript {
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: rgba(217,83,79,0.08);
+    border-left: 2px solid var(--red);
+    font-size: 12.5px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.5;
+    display: none;
+  }
+  .live-transcript.active { display: block; }
+  .live-transcript .label {
+    color: var(--red);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .live-transcript .label::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--red);
+    animation: micPulse 1.4s infinite;
+  }
+  .live-transcript .interim { opacity: 0.55; font-style: italic; }
+
+  .polishing {
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: rgba(245,166,35,0.08);
+    border-left: 2px solid var(--amber);
+    font-size: 12.5px;
+    color: var(--amber);
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .polishing .spinner {
+    width: 14px; height: 14px;
+    border: 2px solid rgba(245,166,35,0.25);
+    border-top-color: var(--amber);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .dictation-toggle {
+    margin-top: 8px;
+    display: flex;
+    gap: 0;
+    align-items: center;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .dictation-toggle .dt-label {
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-right: 10px;
+    text-transform: uppercase;
+  }
+  .dictation-toggle .dt-btn {
+    background: var(--panel-2);
+    color: var(--muted);
+    padding: 4px 12px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: 1px solid var(--border);
+  }
+  .dictation-toggle .dt-btn:first-of-type { border-radius: 3px 0 0 3px; }
+  .dictation-toggle .dt-btn:last-of-type  { border-radius: 0 3px 3px 0; border-left: none; }
+  .dictation-toggle .dt-btn.active {
+    background: var(--orange);
+    color: var(--bg);
+    border-color: var(--orange);
+  }
+  .dictation-toggle .dt-meta {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--panel-3); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--faint); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">Marketing <em>OS</em> · Demo</div>
+  <div class="meta">
+    <span><span class="pulse"></span> &nbsp;tenant:&nbsp;jones</span>
+    <span>·</span>
+    <span id="stat-pending">0 pending</span>
+    <span>·</span>
+    <span id="stat-published">0 published</span>
+    <button class="reset" onclick="resetDemo()">Reset demo</button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- ── SIDEBAR ────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="group">Trigger</div>
+    <button class="nav-item active" data-view="field"><span class="dot"></span> Field intake <span class="badge" id="badge-field">0</span></button>
+    <button class="nav-item teal" data-view="reviews"><span class="dot"></span> Reviews <span class="badge" id="badge-reviews">0</span></button>
+    <button class="nav-item amber" data-view="leads"><span class="dot"></span> Leads <span class="badge" id="badge-leads">0</span></button>
+    <button class="nav-item spark" data-view="seo"><span class="dot"></span> SEO content <span class="badge" id="badge-seo">0</span></button>
+
+    <div class="group" style="margin-top: 18px">View</div>
+    <button class="nav-item" data-view="published"><span class="dot" style="background:var(--green)"></span> Published <span class="badge" id="badge-published">0</span></button>
+    <button class="nav-item" data-view="about"><span class="dot" style="background:var(--muted)"></span> About this demo</button>
+  </aside>
+
+  <!-- ── MAIN ───────────────────────────────────────────────── -->
+  <main class="main" id="main"></main>
+
+  <!-- ── RIGHT: APPROVAL QUEUE ─────────────────────────────── -->
+  <aside class="rightbar">
+    <h3>Approval queue</h3>
+    <div class="sub">Drafts waiting on you. Click any to review.</div>
+    <div id="queue"></div>
+  </aside>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════════════════════════════════════════════
+//  SCENARIO LIBRARY — pre-baked outputs that mirror what live agents
+//  return. Realistic Jones / Callus voice from the dry-run demo.
+// ════════════════════════════════════════════════════════════════════════
+
+const FIELD_SCENARIOS = [
+  {
+    id: 'spring-creek',
+    label: 'EXCAVATING · UTAH COUNTY',
+    title: 'Spring Creek Commerce Pad',
+    preview: 'Mass-ex wrapped, 18,000 yds, cut-fill balanced.',
+    intake: "Wrapped mass-ex on the Spring Creek Commerce Pad in Spanish Fork today. ~18,000 yards moved, cut-fill balanced on site, no haul-off. Two weather days but we held grade. Crew killed it.",
+    division: 'excavating',
+    drafts: {
+      linkedin: "Wrapped mass excavation on Spring Creek Commerce Pad in Spanish Fork, Utah County this week — roughly 18,000 cubic yards moved, cut-fill balanced on site, no haul-off. The crew kept the pad on grade through two days of weather that wanted otherwise. Thanks to the GC for keeping the schedule honest and to our operators for reading the dirt right. On to subgrade next week. Since 1990.",
+      linkedin_tags: ['#HeavyCivil', '#UtahConstruction', '#SiteWork'],
+      gmb: "Crew wrapped the dirt phase on Spring Creek Commerce Pad over in Spanish Fork, Utah County. Pad's on grade, site's clean, and we're set up for utilities next. If you've got a commercial pad coming up on the Wasatch Front, we'd be glad to talk.",
+      gmb_cta: 'Get quote — Request a bid',
+      instagram: "Eighteen thousand yards later, Spring Creek Commerce Pad is on grade. Two weather days, one cut-fill plan, zero haul-off. Hood down. Heads up. — the Jones crew",
+      instagram_tags: ['#yellowiron', '#dirtwork', '#utahbuilt', '#since1990'],
+      blog_title: "Mass Excavation in Spanish Fork: How We Balanced Cut-Fill on Spring Creek Commerce Pad",
+      blog: "Mass excavation on a tight commercial pad in Spanish Fork, Utah County comes down to two things: reading the dirt and reading the schedule. On Spring Creek Commerce Pad, our crew moved roughly 18,000 cubic yards over six working days, balancing cut-and-fill on site to avoid import or haul-off costs.\n\nGPS-guided iron does the math; experienced operators do the judgment. We coordinated with the GC's surveyor daily, kept stockpiles staged away from the future utility corridor, and turned over a clean pad on grade — ready for the wet utilities crew without a punch list.",
+      newsletter: "Big week for the Spring Creek Commerce Pad crew — Tony, Manny, and the operators wrapped the mass-ex phase on grade and on schedule, balancing cut-fill with no import. Two weather days didn't stop them. Utilities phase kicks off Monday. Nice work, all."
+    }
+  },
+  {
+    id: 'old-mill',
+    label: 'EXCAVATING · DAVIS COUNTY',
+    title: 'Old Mill subdivision — utilities',
+    preview: '14-lot subdivision, storm + sewer mains in.',
+    intake: "Old Mill subdivision in Kaysville — wet utilities phase. 14 lots, all storm and sewer mains in this week, water mains start Monday. Pressure tested clean on the south leg.",
+    division: 'excavating',
+    drafts: {
+      linkedin: "Wrapped wet utilities on the Old Mill subdivision in Kaysville this week — 14 lots, full storm and sewer main runs, all pressure tested clean on the south leg. Water mains kick off Monday. Self-perform start to finish keeps the schedule honest and the GC's punch list short. Four generations of doing it that way.",
+      linkedin_tags: ['#WetUtilities', '#UtahDevelopment', '#Subdivision'],
+      gmb: "Just wrapped storm and sewer mains across a 14-lot subdivision in Kaysville. Self-perform wet utilities, full pressure testing, water mains starting next week. If you're developing in Davis County and need a contractor who runs their own pipe crew, give us a call.",
+      gmb_cta: 'Call — Estimating',
+      instagram: "14 lots. Storm in. Sewer in. South leg pressure tested clean. Water mains queued for Monday. Kaysville, Old Mill subdivision. — Jones crew",
+      instagram_tags: ['#wetutilities', '#utahdirt', '#pipecrew', '#kaysville'],
+      blog_title: "Self-Performing Wet Utilities on a 14-Lot Subdivision in Kaysville",
+      blog: "When a subdivision developer in Davis County asked us to handle wet utilities on a 14-lot project off Old Mill Road, we ran the storm, sewer, and water mains end-to-end with our own crews and our own iron. No subbing the pipe out, no schedule slip waiting for someone else's foreman to show up.\n\nThat's how we keep utility phases on the GC's critical path — self-perform from trench to backfill, and pressure-test clean before we hand it off. Old Mill came in on schedule, with the water mains queued up the same week sewer was buttoned up.",
+      newsletter: "Old Mill in Kaysville is moving — Aaron's pipe crew put in the full storm and sewer mains across all 14 lots, pressure tested clean. Water mains start Monday. The schedule's holding. Good work."
+    }
+  },
+  {
+    id: 'mobile-weld',
+    label: 'CALLUS · MOBILE WELDING',
+    title: 'Plant emergency — mobile weld',
+    preview: 'Conveyor frame repair, called in at 11pm.',
+    intake: "Got a call from a gravel plant outside Lehi at 11pm last night — conveyor frame cracked, line down. Marco rolled at midnight, MIG repair on the cracked sections, plant was running again by 5am. Plant manager texted thanks twice.",
+    division: 'fab',
+    drafts: {
+      linkedin: "11pm call from a gravel plant outside Lehi — conveyor frame cracked, production line down. Marco rolled the truck at midnight, ran MIG repairs on the cracked sections, and the plant was running again by 5am. That's mobile welding done right: same night, fully portable, full structural repair. When your plant goes down at midnight, you don't need a quote — you need a welder.",
+      linkedin_tags: ['#MobileWelding', '#PlantMaintenance', '#StructuralWelding'],
+      gmb: "Took a midnight call from a gravel plant outside Lehi — conveyor frame down, production stopped. Marco rolled the truck, repaired the structural cracks, plant was running again by 5am. 24-hour mobile welding service across the Wasatch Front. Save the number.",
+      gmb_cta: 'Call — 24/7 line',
+      instagram: "11pm call. Conveyor frame cracked. Plant down. Marco rolled at midnight, MIG'd the repair, line was running by 5. That's mobile welding. — Callus Fab",
+      instagram_tags: ['#mobilewelder', '#mig', '#24hourservice', '#wasatchfront'],
+      blog_title: "What 24-Hour Mobile Welding Actually Looks Like: A Lehi Plant Emergency",
+      blog: "When a gravel plant outside Lehi called us at 11pm with a cracked conveyor frame, the question wasn't whether we could fix it — it was how fast we could be on site. Marco was rolling the mobile rig by midnight and welding by 1am.\n\nMobile welding for industrial plants isn't about price-shopping in the morning. It's about whether your welder picks up at 11pm. Callus runs a 24-hour line because every hour a plant is down costs more than the repair. Our trucks carry MIG, TIG, stick, and OFC — whatever the call requires.",
+      newsletter: "Marco took a midnight call from a Lehi gravel plant last night — conveyor frame down. Repaired structural cracks on site, plant was running again by 5am. Plant manager was so relieved he texted twice. Nice rollout, Marco."
+    }
+  },
+  {
+    id: 'shop-fab',
+    label: 'CALLUS · SHOP FABRICATION',
+    title: 'Custom handrail — Sandy retail',
+    preview: 'Stainless handrail, 240 LF, two stairs + ramp.',
+    intake: "Wrapped the stainless handrail package for the Sandy retail center this week — 240 linear feet, two stairs and one ramp, all 1.5\" sched 40. Welded clean in the shop, polished, hauled it out for install Friday morning.",
+    division: 'fab',
+    drafts: {
+      linkedin: "Wrapped a 240-LF stainless handrail package this week — two stair runs and a ramp at a Sandy retail center, all 1.5\" sched 40, welded and polished in our shop and hauled out clean for Friday install. Custom architectural fab is half engineering, half craftsmanship. We treat both halves the same.",
+      linkedin_tags: ['#StainlessFab', '#ArchitecturalSteel', '#CustomFabrication'],
+      gmb: "Just delivered a 240-foot stainless handrail package — two stairs and a ramp — to a Sandy retail center. All shop-welded, polished, and installed clean. If you have an architectural steel package coming up on the Wasatch Front, our shop's set up for it.",
+      gmb_cta: 'Email — Shop quote',
+      instagram: "240 feet of stainless. Two stairs and a ramp. Welded clean, polished smooth, on the truck Friday morning. Sandy retail center. — Callus shop crew",
+      instagram_tags: ['#stainlessfab', '#shoplife', '#architecturalsteel', '#calluscrew'],
+      blog_title: "Architectural Stainless Fab: 240 Feet of Handrail for a Sandy Retail Center",
+      blog: "Architectural stainless work like a 240-LF handrail package isn't just welding — it's pre-fab planning. We laid out two stair runs and a ramp from shop drawings, broke the runs into deliverable sections, welded clean joints in the shop, and polished every weld before it left.\n\nFriday morning the truck rolled out, the install crew set the runs in under a day, and the GC's punch list came back empty. That's what shop fabrication should look like — clean welds, polished surfaces, and a delivery that doesn't slow the building down.",
+      newsletter: "Rico and the shop crew finished the Sandy retail handrail package this week — 240 LF of stainless, all polished, on the truck Friday. The install crew said it went up clean. Nice fab work, team."
+    }
+  }
+];
+
+const REVIEW_SCENARIOS = [
+  {
+    id: 'review-3star',
+    rating: 3,
+    name: 'Brent M.',
+    text: "Work itself was solid — they got the pad ready on time. Communication on the back end could've been a lot better, took multiple calls to figure out the punch list status.",
+    response: {
+      tier: '3_4_star',
+      response: "Appreciate the honest read, Brent. Glad the work itself landed; the communication gap on the back end is on us to tighten up. If you want to walk through what could've gone better, give Steve a call at the office — he'd want to hear it directly.",
+      internal: 'Loop Steve in for a callback within 48 hrs.',
+      escalate: false
+    }
+  },
+  {
+    id: 'review-5star',
+    rating: 5,
+    name: 'Cassidy L.',
+    text: "Used Jones for site work on a 14-lot subdivision. Aaron in estimating was straight with us from day one, schedule held tight, and the foreman's crew left the site cleaner than they found it. Will absolutely use again.",
+    response: {
+      tier: '5_star',
+      response: "Thanks Cassidy — that one means a lot, especially the bit about Aaron and the crew. We'll pass it along. When you're ready for the next one, you know where we are.",
+      internal: 'Share with Aaron + estimating team.',
+      escalate: false
+    }
+  },
+  {
+    id: 'review-1star',
+    rating: 1,
+    name: 'Anonymous',
+    text: "Showed up two hours late and the foreman was rude. Never using them again.",
+    response: {
+      tier: '1_2_star',
+      response: "We hear you and we're sorry it landed this way. We'd like to understand what happened — please call Steve at the office directly so we can look into the specifics on our end.",
+      internal: 'ESCALATE: anonymous 1-star, named "rude foreman" — Steve to investigate before any public follow-up.',
+      escalate: true
+    }
+  }
+];
+
+const LEAD_SCENARIOS = [
+  {
+    id: 'lead-excavation',
+    text: "Hi — Cassidy Larsen with Holladay Builders. We've got a 14-lot subdivision off Old Mill Road, looking at moving roughly 6k yards of dirt this fall. Got someone I can talk to about getting on a bid list?",
+    classification: 'excavation',
+    confidence: 0.92,
+    urgency: 'warm',
+    name: 'Cassidy Larsen, Holladay Builders',
+    slack: '🟡 New excavation inquiry from Cassidy Larsen, Holladay Builders — 14-lot subdivision, ~6k yards, fall start.\nSuggested owner: Aaron (Estimating).',
+    autoreply_subject: 'Got your note — we\'ll be in touch',
+    autoreply_body: "Thanks for reaching out, Cassidy.\n\nAaron in Estimating will follow up within one business day to talk about getting Holladay Builders on the bid list for the Old Mill subdivision. If you need to reach us sooner, the office line is on the website.\n\n— Toone Construction Co.",
+    next_action: 'Route to Aaron (Estimating) and confirm callback within 24 hrs.'
+  },
+  {
+    id: 'lead-fab',
+    text: "Need a mobile welder for a structural repair on a hopper at our plant in Tooele. Today if possible. Frame is cracked along a weld seam.",
+    classification: 'fabrication',
+    confidence: 0.96,
+    urgency: 'hot',
+    name: '(unnamed) — plant in Tooele',
+    slack: '🔴 HOT mobile welding inquiry — structural hopper repair, plant in Tooele, same-day request.\nSuggested owner: Marco (Mobile / Callus).',
+    autoreply_subject: 'On it — calling you back',
+    autoreply_body: "Got your message. Marco from our mobile crew is the right person — he'll be calling within the hour to confirm the address and ETA.\n\nIf this is urgent and you haven't heard from us in 30 minutes, call our 24-hour line listed on the site.\n\n— ",
+    next_action: 'Call Marco directly — 30 minute SLA on this one.'
+  },
+  {
+    id: 'lead-spam',
+    text: "Hello sir/madam, I represent SEO services from offshore agency. We can rank your website #1 on google in 30 days. Cheap rate guaranteed. Reply to this email immediately for special pricing!",
+    classification: 'spam',
+    confidence: 0.99,
+    urgency: 'cold',
+    name: '(probable spam)',
+    slack: '⚫ Inquiry classified as spam — not routed.',
+    autoreply_subject: null,
+    autoreply_body: null,
+    next_action: 'Discard. No reply, no routing.'
+  }
+];
+
+const SEO_TARGETS = [
+  {
+    id: 'seo-utah-excavation',
+    keyword: 'excavating contractor utah',
+    target_area: 'Utah (statewide)',
+    page: {
+      h1: 'Excavation Contractor in Utah — Toone Construction Co.',
+      meta: 'Toone Construction Co. handles commercial site work, mass excavation, and utilities across Utah. Family-run since 1990. Call for a bid.',
+      intro: "We move dirt across Utah for commercial pads, subdivisions, and public work. Four generations on the same yard in Mapleton, Utah. If it involves a track hoe, a pay item, and a tight schedule, we're at home.",
+      sections: [
+        { h2: 'Scope: What We Self-Perform', body: "Mass excavation, stripping topsoil to subgrade, cut-fill balance with GPS-guided iron, structural fill placement, storm and sewer mains, and import/export when the site demands it. We coordinate joint trench with Rocky Mountain Power and Dominion Energy directly so your dry-utility schedule doesn't slip." },
+        { h2: "What Utah GCs Get When We're On The Job", body: "A foreman who reads plans before he reads email. Equipment that starts in February. A super who'll tell you the truth about schedule on a Tuesday morning, not Friday afternoon. And a turnover that doesn't leave a punch list for the concrete crew." },
+        { h2: 'Working in Utah: Geography & Reg Notes', body: "Soils across Utah run the spectrum — alluvial fans on the bench, high water table near the lake, and rock once you climb east. We factor frost depth, UDOT permit lead times, and city-specific SWPPP requirements into the schedule from day one. No surprises at preconstruction." }
+      ]
+    }
+  },
+  {
+    id: 'seo-mobile-welder',
+    keyword: 'mobile welder west jordan',
+    target_area: 'Wasatch Front (West Jordan focus)',
+    page: {
+      h1: 'Mobile Welder in West Jordan — ',
+      meta: ' — 24-hour mobile welding across the Wasatch Front. MIG, TIG, stick. Industrial, structural, plant emergency repairs.',
+      intro: "When your plant goes down at midnight, you don't need a quote — you need a welder. Callus runs a 24-hour mobile line across the Wasatch Front out of West Jordan. Trucks carry MIG, TIG, stick, and OFC.",
+      sections: [
+        { h2: 'What our mobile rigs handle', body: "Structural repair welding on plants, hoppers, conveyors, frames, and racks. AWS-certified procedures for steel, stainless, and aluminum. Code-compliant repair documentation when your insurance or your plant safety officer needs it." },
+        { h2: 'Same-day emergency response', body: "Industrial plants don't go down on a schedule. Our mobile line is staffed 24 hours and our trucks roll inside an hour for the Wasatch Front. We've welded conveyor frames at 1am and gotten plants running by sunrise more than once." },
+        { h2: 'Service area', body: "West Jordan, Salt Lake City, Sandy, Murray, Draper, South Jordan, Lehi, American Fork, Orem, Provo, Bountiful, Kaysville, Layton, Ogden — anywhere on the Wasatch Front. Outside that, call us anyway. We've made it work." }
+      ]
+    }
+  }
+];
+
+// ════════════════════════════════════════════════════════════════════════
+//  STATE — localStorage-backed
+// ════════════════════════════════════════════════════════════════════════
+const STORAGE_KEY = 'mos_demo_state_v1';
+const DEFAULT_STATE = { drafts: [], view: 'field' };
+let state = loadState();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return structuredClone(DEFAULT_STATE);
+    return JSON.parse(raw);
+  } catch (e) { return structuredClone(DEFAULT_STATE); }
+}
+function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function resetDemo() {
+  if (!confirm('Reset the demo? All drafts will be cleared.')) return;
+  state = structuredClone(DEFAULT_STATE);
+  saveState();
+  render();
+}
+function uid() { return Math.random().toString(36).slice(2, 10); }
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  RENDERING
+// ════════════════════════════════════════════════════════════════════════
+function render() {
+  const main = document.getElementById('main');
+
+  // Sidebar active
+  document.querySelectorAll('.nav-item').forEach(b => {
+    b.classList.toggle('active', b.dataset.view === state.view);
+  });
+
+  // Counts
+  const pending = state.drafts.filter(d => d.status === 'pending').length;
+  const published = state.drafts.filter(d => d.status === 'approved').length;
+  document.getElementById('stat-pending').textContent = `${pending} pending`;
+  document.getElementById('stat-published').textContent = `${published} published`;
+  document.getElementById('badge-field').textContent = state.drafts.filter(d => d.kind==='field' && d.status==='pending').length;
+  document.getElementById('badge-reviews').textContent = state.drafts.filter(d => d.kind==='review' && d.status==='pending').length;
+  document.getElementById('badge-leads').textContent = state.drafts.filter(d => d.kind==='lead' && d.status==='pending').length;
+  document.getElementById('badge-seo').textContent = state.drafts.filter(d => d.kind==='seo' && d.status==='pending').length;
+  document.getElementById('badge-published').textContent = published;
+
+  // View
+  if (state.view === 'field') main.innerHTML = renderField();
+  else if (state.view === 'reviews') main.innerHTML = renderReviews();
+  else if (state.view === 'leads') main.innerHTML = renderLeads();
+  else if (state.view === 'seo') main.innerHTML = renderSeo();
+  else if (state.view === 'published') main.innerHTML = renderPublished();
+  else if (state.view === 'about') main.innerHTML = renderAbout();
+  else if (state.view === 'draft') main.innerHTML = renderDraft();
+
+  renderQueue();
+}
+
+function renderField() {
+  return `
+    <div class="panel-title">Field <em>→</em> Content</div>
+    <div class="panel-sub">Foreman texts in. The Field-to-Content agent drafts five channel-specific outputs.</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.1em;margin-bottom:8px">PICK A SCENARIO</div>
+    ${FIELD_SCENARIOS.map(sc => `
+      <div class="scenario-card" onclick="runField('${sc.id}')">
+        <div class="label">${sc.label}</div>
+        <div class="ttl">${sc.title}</div>
+        <div class="pre">${sc.preview}</div>
+      </div>
+    `).join('')}
+    <div class="custom-form">
+      <label>Or dictate / type your own foreman text-in</label>
+      <div class="ds-textarea-wrap">
+        <textarea id="custom-field" rows="3" placeholder="Hit the mic and talk like you're calling it in from the cab. e.g. 'Wrapped utilities at the Heber subdivision today, 18 lots, sewer main pressure tested clean...'"></textarea>
+        <button class="mic-btn" id="custom-field_mic" title="Dictate" onclick="micToggleIntake()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+      </div>
+      <div class="live-transcript" id="custom-field_lt">
+        <div class="label">Listening</div>
+        <div class="text"><span class="final"></span><span class="interim"></span></div>
+      </div>
+      <div class="polishing" id="custom-field_polish" style="display:none">
+        <div class="spinner"></div>
+        <div>Cleaning up the foreman text-in…</div>
+      </div>
+      <button class="btn-primary" style="margin-top:10px" onclick="runFieldCustom()">Run agent</button>
+    </div>
+  `;
+}
+
+function renderReviews() {
+  return `
+    <div class="panel-title">Review <em>·</em> Replies</div>
+    <div class="panel-sub">A new Google review comes in. The Reputation agent drafts a reply tuned to the rating tier.</div>
+    ${REVIEW_SCENARIOS.map(rv => `
+      <div class="scenario-card teal" onclick="runReview('${rv.id}')">
+        <div class="label">${'★'.repeat(rv.rating)}${'☆'.repeat(5-rv.rating)} &nbsp;·&nbsp; ${rv.name}</div>
+        <div class="pre">${rv.text}</div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function renderLeads() {
+  return `
+    <div class="panel-title">Lead <em>·</em> Triage</div>
+    <div class="panel-sub">A site contact form fires. The Lead Triage agent classifies, routes, and drafts the auto-reply.</div>
+    ${LEAD_SCENARIOS.map(ld => `
+      <div class="scenario-card amber" onclick="runLead('${ld.id}')">
+        <div class="label">CONTACT FORM · ${ld.name}</div>
+        <div class="pre">${ld.text}</div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function renderSeo() {
+  return `
+    <div class="panel-title">SEO <em>·</em> Service-area page</div>
+    <div class="panel-sub">Run monthly. The SEO Content agent drafts a full service-area page targeted at a ranking gap.</div>
+    ${SEO_TARGETS.map(t => `
+      <div class="scenario-card spark" onclick="runSeo('${t.id}')">
+        <div class="label">TARGET KEYWORD</div>
+        <div class="ttl">${t.keyword}</div>
+        <div class="pre">Service area: ${t.target_area}</div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function renderPublished() {
+  const pubs = state.drafts.filter(d => d.status === 'approved').reverse();
+  if (pubs.length === 0) {
+    return `
+      <div class="panel-title">Published</div>
+      <div class="panel-sub">Approved drafts render here as platform-styled cards.</div>
+      <div class="empty">Nothing published yet. Run a scenario, approve a draft, and watch it land here.</div>
+    `;
+  }
+  return `
+    <div class="panel-title">Published</div>
+    <div class="panel-sub">${pubs.length} approved item${pubs.length===1?'':'s'} — what it'd actually look like once posted.</div>
+    ${pubs.map(d => renderPublishedCard(d)).join('')}
+  `;
+}
+
+function renderPublishedCard(d) {
+  if (d.kind === 'field') {
+    const sc = FIELD_SCENARIOS.find(s => s.id === d.scenario);
+    const name = d.brand === 'callus' ? '' : 'Toone Construction Co.';
+    const initial = d.brand === 'callus' ? 'C' : 'J';
+    const lk = d.outputs.linkedin || sc.drafts.linkedin;
+    const tags = (d.outputs.linkedin_tags || sc.drafts.linkedin_tags).join(' ');
+    return `
+      <div class="published-card">
+        <div class="pc-head">
+          <div class="icon" style="${d.brand==='callus'?'background:var(--spark)':''}">${initial}</div>
+          <div class="who">${name}</div>
+          <div class="when">LinkedIn · just now</div>
+        </div>
+        <div class="pc-body">
+          ${escapeHtml(lk).replace(/\n/g,'<br/>')}
+          <div class="hashtags">${tags}</div>
+        </div>
+        <div class="pc-meta">draft_${d.id} · approved · scheduled to LinkedIn</div>
+      </div>
+      <div class="published-card">
+        <div class="pc-head">
+          <div class="icon" style="background:var(--teal)">G</div>
+          <div class="who">${name}</div>
+          <div class="when">Google Business · just now</div>
+        </div>
+        <div class="pc-body">
+          ${escapeHtml(d.outputs.gmb || sc.drafts.gmb).replace(/\n/g,'<br/>')}
+          <div style="margin-top:10px"><span style="background:var(--orange);color:var(--bg);padding:5px 10px;border-radius:3px;font-size:11.5px;font-weight:600">${d.outputs.gmb_cta || sc.drafts.gmb_cta}</span></div>
+        </div>
+        <div class="pc-meta">draft_${d.id} · approved · scheduled to GBP</div>
+      </div>
+    `;
+  }
+  if (d.kind === 'review') {
+    const rv = REVIEW_SCENARIOS.find(r => r.id === d.scenario);
+    return `
+      <div class="published-card">
+        <div class="pc-head">
+          <div class="icon" style="background:var(--teal)">G</div>
+          <div class="who">Reply to ${rv.name}</div>
+          <div class="when">Google Business · just now</div>
+        </div>
+        <div class="pc-body">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px">↪ Replying to ${'★'.repeat(rv.rating)}${'☆'.repeat(5-rv.rating)} review</div>
+          ${escapeHtml(d.outputs.response || rv.response.response).replace(/\n/g,'<br/>')}
+        </div>
+        <div class="pc-meta">draft_${d.id} · approved · ${d.outputs.escalate ? 'ESCALATED to Steve' : 'reply posted'}</div>
+      </div>
+    `;
+  }
+  if (d.kind === 'lead') {
+    const ld = LEAD_SCENARIOS.find(l => l.id === d.scenario);
+    return `
+      <div class="published-card">
+        <div class="pc-head">
+          <div class="icon" style="background:var(--amber)">@</div>
+          <div class="who">Auto-reply to ${ld.name}</div>
+          <div class="when">Email · just now</div>
+        </div>
+        <div class="pc-body">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Subject: ${escapeHtml(ld.autoreply_subject || 'No reply sent')}</div>
+          ${ld.autoreply_body ? escapeHtml(ld.autoreply_body).replace(/\n/g,'<br/>') : '<em>No auto-reply sent (spam classification).</em>'}
+        </div>
+        <div class="pc-meta">draft_${d.id} · approved · ${ld.next_action}</div>
+      </div>
+    `;
+  }
+  if (d.kind === 'seo') {
+    const t = SEO_TARGETS.find(x => x.id === d.scenario);
+    return `
+      <div class="published-card">
+        <div class="pc-head">
+          <div class="icon" style="background:var(--spark)">S</div>
+          <div class="who">Service-area page committed</div>
+          <div class="when">Static-site CMS · just now</div>
+        </div>
+        <div class="pc-body">
+          <div class="seo-page-preview">
+            <h1>${escapeHtml(t.page.h1)}</h1>
+            <div class="meta-desc">${escapeHtml(t.page.meta)}</div>
+            <p>${escapeHtml(t.page.intro)}</p>
+            ${t.page.sections.map(sec => `<h2>${escapeHtml(sec.h2)}</h2><p>${escapeHtml(sec.body)}</p>`).join('')}
+          </div>
+        </div>
+        <div class="pc-meta">draft_${d.id} · committed to content/service-areas/${t.id}.md</div>
+      </div>
+    `;
+  }
+  return '';
+}
+
+function renderAbout() {
+  return `
+    <div class="panel-title">About <em>·</em> this demo</div>
+    <div class="panel-sub">What you're actually clicking on.</div>
+    <div style="background:var(--panel);padding:24px;border-left:3px solid var(--orange);margin-bottom:16px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--orange);letter-spacing:0.14em;margin-bottom:8px">WHAT THIS IS</div>
+      <p style="margin-bottom:12px">A fully client-side simulator of the Marketing Operating System. Every interaction here mirrors the real production pipeline — pick a trigger (field intake, review, lead, SEO request) → agent drafts → land in your approval queue → you edit / approve → render as platform-styled "published" cards.</p>
+      <p style="color:var(--muted);font-size:13px">All drafts are pre-baked from the same prompts the real Claude-backed agents run, so you can show this off without any API key, any backend, or any costs.</p>
+    </div>
+    <div style="background:var(--panel);padding:24px;border-left:3px solid var(--red);margin-bottom:16px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--red);letter-spacing:0.14em;margin-bottom:8px">🎤 NEW · VOICE-TO-DRAFT (channel-aware)</div>
+      <p style="margin-bottom:10px">Every editable field has a mic button — including the foreman text-in box. Click, talk, click again. Your dictation gets cleaned up <em>per channel</em>, not generically:</p>
+      <ul style="list-style:none;padding:0;margin-bottom:12px;font-size:13px;color:var(--text)">
+        <li style="padding:4px 0;border-bottom:1px dashed var(--border)"><strong style="color:var(--orange)">Foreman intake</strong> — keeps it punchy, allows fragments, normalizes "thousand yards" → "k yards"</li>
+        <li style="padding:4px 0;border-bottom:1px dashed var(--border)"><strong style="color:var(--orange)">LinkedIn</strong> — full sentences, brand close ("Since 1990." or "Built by hand."), hashtag tail</li>
+        <li style="padding:4px 0;border-bottom:1px dashed var(--border)"><strong style="color:var(--orange)">Google Business</strong> — friendly close, length-capped, CTA-aware</li>
+        <li style="padding:4px 0;border-bottom:1px dashed var(--border)"><strong style="color:var(--orange)">Instagram</strong> — punchy, allows fragments, sign-off ("— the Jones crew"), hashtag bank</li>
+        <li style="padding:4px 0;border-bottom:1px dashed var(--border)"><strong style="color:var(--orange)">Blog snippet</strong> — long-form, inserts paragraph break, full sentences</li>
+        <li style="padding:4px 0;border-bottom:1px dashed var(--border)"><strong style="color:var(--orange)">Internal newsletter</strong> — looser tone, internal voice OK</li>
+        <li style="padding:4px 0;border-bottom:1px dashed var(--border)"><strong style="color:var(--orange)">Review reply</strong> — tier-aware (1-2★ adds named-contact close, 3-4★ adds path forward, 5★ adds crew thanks)</li>
+        <li style="padding:4px 0"><strong style="color:var(--orange)">Lead auto-reply / SEO content</strong> — branded sign-off / formal grammar respectively</li>
+      </ul>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:8px">Toggle <strong>[Raw / Polished]</strong> on any field to see what you actually said vs what got rendered. <strong>↺ Re-record</strong> replaces the current voice draft in one click.</p>
+      <p style="color:var(--muted);font-size:13px">Quality upgrades in this demo: ~80-term construction domain dictionary that auto-fixes common mis-hears ("Spanish work" → "Spanish Fork", "G B P" → "GBP", "cup fill" → "cut-fill"), spoken-number normalization ("eighteen thousand yards" → "18,000 yards"), and 3-way alternative picking that prefers transcripts containing recognized domain terms.</p>
+      <p style="color:var(--amber);font-size:12px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border)"><strong>For production:</strong> swap to OpenAI Whisper / gpt-4o-transcribe for ~2× accuracy and proper punctuation. ~$0.006/min in API cost. Needs a tiny backend proxy. Listed in the Marketing Operating System roadmap.</p>
+    </div>
+    <div style="background:var(--panel);padding:24px;border-left:3px solid var(--teal);margin-bottom:16px">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);letter-spacing:0.14em;margin-bottom:8px">WHAT THE REAL SYSTEM ADDS</div>
+      <ul style="list-style:none;padding:0">
+        <li style="padding:6px 0;border-bottom:1px dashed var(--border)"><strong>Live LLM calls</strong> via the Claude API — your foreman's actual text generates the drafts, not a pre-baked scenario.</li>
+        <li style="padding:6px 0;border-bottom:1px dashed var(--border)"><strong>SMS intake</strong> via Twilio — foreman texts a number, the OS handles the rest.</li>
+        <li style="padding:6px 0;border-bottom:1px dashed var(--border)"><strong>Real publishing</strong> via Google Business / LinkedIn / Meta APIs once you click approve.</li>
+        <li style="padding:6px 0;border-bottom:1px dashed var(--border)"><strong>Persistent multi-user queue</strong> — your office manager and PM see the same inbox.</li>
+        <li style="padding:6px 0"><strong>Performance tracking</strong> — which drafts converted, what the cadence looks like, where to tune.</li>
+      </ul>
+    </div>
+    <div style="background:var(--panel);padding:24px;border-left:3px solid var(--green)">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--green);letter-spacing:0.14em;margin-bottom:8px">PROOF POINTS</div>
+      <p style="margin-bottom:8px"><strong>Source code:</strong> <a href="https://github.com/coolnerd-tt/marketing-os" target="_blank" style="color:var(--orange)">github.com/coolnerd-tt/marketing-os</a> — five working agents, FastAPI approval queue, Jones tenant config, runnable demo.</p>
+      <p style="margin-bottom:8px"><strong>Architecture:</strong> <a href="marketing-os-diagram.html" target="_blank" style="color:var(--orange)">marketing-os-diagram.html</a></p>
+      <p><strong>Static sample gallery:</strong> <a href="marketing-os-sample.html" target="_blank" style="color:var(--orange)">marketing-os-sample.html</a></p>
+    </div>
+  `;
+}
+
+function renderDraft() {
+  const d = state.drafts.find(x => x.id === state.activeDraft);
+  if (!d) { state.view = 'field'; render(); return ''; }
+
+  if (d.kind === 'field') {
+    const sc = FIELD_SCENARIOS.find(s => s.id === d.scenario);
+    const dx = d.outputs;
+    return `
+      <button class="btn-ghost" onclick="setView('field')">← Back to Field intake</button>
+      <div class="panel-title" style="margin-top:16px">Draft <em>·</em> ${escapeHtml(sc.title)}</div>
+      <div class="panel-sub">5 outputs from one foreman text-in. Edit any field, approve all, or reject.</div>
+
+      <div class="approve-all-bar">
+        <span class="lbl">Quick action</span>
+        <button class="btn-approve" onclick="approveAll('${d.id}')">Approve all 5</button>
+        <button class="btn-reject" onclick="rejectDraft('${d.id}')">Reject draft</button>
+      </div>
+
+      ${draftSection('LinkedIn · Jones', '', dx.linkedin, d.id, 'linkedin')}
+      ${draftSection('Google Business Profile', 'teal', dx.gmb, d.id, 'gmb')}
+      ${draftSection('Instagram + Facebook', 'spark', dx.instagram, d.id, 'instagram')}
+      ${draftSection('Blog snippet', 'amber', dx.blog, d.id, 'blog', dx.blog_title)}
+      ${draftSection('Internal newsletter', 'green', dx.newsletter, d.id, 'newsletter')}
+    `;
+  }
+
+  if (d.kind === 'review') {
+    const rv = REVIEW_SCENARIOS.find(r => r.id === d.scenario);
+    return `
+      <button class="btn-ghost" onclick="setView('reviews')">← Back to Reviews</button>
+      <div class="panel-title" style="margin-top:16px">Review reply <em>·</em> ${rv.name}</div>
+      <div class="panel-sub">Tier-aware response drafted by the Reputation agent.</div>
+
+      <div class="review-input">
+        <div class="stars">${'★'.repeat(rv.rating)}${'☆'.repeat(5-rv.rating)}</div>
+        <div class="who">${rv.name} · ${rv.rating} stars · Google · 2 days ago</div>
+        <div class="text">"${rv.text}"</div>
+      </div>
+
+      ${draftSection('Drafted reply · tier ' + rv.response.tier, 'teal', d.outputs.response, d.id, 'response')}
+      <div class="draft-section teal">
+        <div class="ds-head"><span class="ds-channel">Internal note</span></div>
+        <div class="ds-body" style="font-size:13px;color:var(--muted)">
+          ${escapeHtml(d.outputs.internal)}
+          ${d.outputs.escalate ? '<div style="margin-top:8px;color:var(--red);font-weight:600">⚠ ESCALATE — flagged for human review before public reply</div>' : ''}
+        </div>
+      </div>
+
+      <div style="margin-top:14px;display:flex;gap:10px">
+        <button class="btn-approve" onclick="approveAll('${d.id}')">${d.outputs.escalate ? 'Acknowledge + queue for Steve' : 'Approve & post reply'}</button>
+        <button class="btn-reject" onclick="rejectDraft('${d.id}')">Reject</button>
+      </div>
+    `;
+  }
+
+  if (d.kind === 'lead') {
+    const ld = LEAD_SCENARIOS.find(l => l.id === d.scenario);
+    const urgencyColor = ld.urgency === 'hot' ? 'var(--red)' : ld.urgency === 'warm' ? 'var(--amber)' : 'var(--muted)';
+    return `
+      <button class="btn-ghost" onclick="setView('leads')">← Back to Leads</button>
+      <div class="panel-title" style="margin-top:16px">Lead <em>·</em> ${escapeHtml(ld.name)}</div>
+      <div class="panel-sub">Classified, routed, and auto-replied by the Lead Triage agent.</div>
+
+      <div class="review-input">
+        <div class="who">CONTACT FORM · 11 minutes ago</div>
+        <div class="text">"${escapeHtml(ld.text)}"</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+        <div style="background:var(--panel);padding:14px;border-left:2px solid var(--amber)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--muted);margin-bottom:4px">CLASSIFICATION</div>
+          <div style="font-weight:600;font-size:14px">${ld.classification}</div>
+        </div>
+        <div style="background:var(--panel);padding:14px;border-left:2px solid var(--amber)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--muted);margin-bottom:4px">CONFIDENCE</div>
+          <div style="font-weight:600;font-size:14px">${(ld.confidence*100).toFixed(0)}%</div>
+        </div>
+        <div style="background:var(--panel);padding:14px;border-left:2px solid var(--amber)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:var(--muted);margin-bottom:4px">URGENCY</div>
+          <div style="font-weight:600;font-size:14px;color:${urgencyColor};text-transform:uppercase">${ld.urgency}</div>
+        </div>
+      </div>
+
+      <div class="draft-section amber">
+        <div class="ds-head"><span class="ds-channel">Slack alert</span></div>
+        <div class="ds-body" style="font-family:'JetBrains Mono',monospace;font-size:12.5px">${escapeHtml(ld.slack).replace(/\n/g,'<br/>')}</div>
+      </div>
+
+      ${ld.autoreply_body ? draftSection('Auto-reply email', 'amber', ld.autoreply_body, d.id, 'autoreply', `Subject: ${ld.autoreply_subject}`) : `
+        <div class="draft-section amber">
+          <div class="ds-head"><span class="ds-channel">Auto-reply</span></div>
+          <div class="ds-body" style="color:var(--muted);font-style:italic">No reply sent — spam classification.</div>
+        </div>
+      `}
+
+      <div style="background:var(--panel-2);padding:14px 18px;margin-top:14px;font-size:13px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.14em">NEXT ACTION:</span>
+        ${escapeHtml(ld.next_action)}
+      </div>
+
+      <div style="margin-top:14px;display:flex;gap:10px">
+        <button class="btn-approve" onclick="approveAll('${d.id}')">${ld.classification==='spam'?'Discard':'Approve & route'}</button>
+        <button class="btn-reject" onclick="rejectDraft('${d.id}')">Override</button>
+      </div>
+    `;
+  }
+
+  if (d.kind === 'seo') {
+    const t = SEO_TARGETS.find(x => x.id === d.scenario);
+    return `
+      <button class="btn-ghost" onclick="setView('seo')">← Back to SEO</button>
+      <div class="panel-title" style="margin-top:16px">SEO page <em>·</em> ${escapeHtml(t.keyword)}</div>
+      <div class="panel-sub">Drafted service-area page. Review on the rendered preview side.</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.14em;margin-bottom:8px">EDITABLE DRAFT</div>
+          ${draftSection('H1', 'spark', t.page.h1, d.id, 'h1')}
+          ${draftSection('Meta description', 'spark', t.page.meta, d.id, 'meta')}
+          ${draftSection('Intro', 'spark', t.page.intro, d.id, 'intro')}
+          ${t.page.sections.map((sec, i) => draftSection(`H2: ${sec.h2}`, 'spark', sec.body, d.id, `section_${i}`)).join('')}
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.14em;margin-bottom:8px">RENDERED PREVIEW</div>
+          <div class="seo-page-preview" style="position:sticky;top:80px">
+            <h1>${escapeHtml(t.page.h1)}</h1>
+            <div class="meta-desc">${escapeHtml(t.page.meta)}</div>
+            <p>${escapeHtml(t.page.intro)}</p>
+            ${t.page.sections.map(sec => `<h2>${escapeHtml(sec.h2)}</h2><p>${escapeHtml(sec.body)}</p>`).join('')}
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;display:flex;gap:10px">
+        <button class="btn-approve" onclick="approveAll('${d.id}')">Publish to site</button>
+        <button class="btn-reject" onclick="rejectDraft('${d.id}')">Reject draft</button>
+      </div>
+    `;
+  }
+
+  return '';
+}
+
+function draftSection(channel, color, content, draftId, fieldKey, subtitle) {
+  const fid = `f_${draftId}_${fieldKey}`;
+  const d = state.drafts.find(x => x.id === draftId);
+  const dict = d && d.dictation && d.dictation[fieldKey];
+  return `
+    <div class="draft-section ${color}">
+      <div class="ds-head">
+        <span class="ds-channel">${channel}</span>
+        ${subtitle ? `<span style="font-size:11px;color:var(--muted)">${escapeHtml(subtitle)}</span>` : ''}
+      </div>
+      <div class="ds-body">
+        <div class="ds-textarea-wrap">
+          <textarea id="${fid}" oninput="updateDraft('${draftId}','${fieldKey}',this.value)">${escapeHtml(content)}</textarea>
+          <button class="mic-btn" id="${fid}_mic" title="Dictate" onclick="micToggle('${draftId}','${fieldKey}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </button>
+        </div>
+        <div class="live-transcript" id="${fid}_lt">
+          <div class="label">Listening</div>
+          <div class="text"><span class="final"></span><span class="interim"></span></div>
+        </div>
+        <div class="polishing" id="${fid}_polish" style="display:none">
+          <div class="spinner"></div>
+          <div>Polishing voice into Jones brand voice…</div>
+        </div>
+        ${dict ? `
+        <div class="dictation-toggle" id="${fid}_toggle">
+          <span class="dt-label">From voice</span>
+          <button class="dt-btn ${dict.view==='raw'?'active':''}" onclick="dictView('${draftId}','${fieldKey}','raw')">Raw</button>
+          <button class="dt-btn ${dict.view==='polished'?'active':''}" onclick="dictView('${draftId}','${fieldKey}','polished')">Polished</button>
+          <button class="dt-btn" style="margin-left:10px;border-radius:3px" onclick="micToggle('${draftId}','${fieldKey}')" title="Record again — replaces current">↺ Re-record</button>
+          <span class="dt-meta">${dict.duration}s · ${dict.word_count} words</span>
+        </div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function renderQueue() {
+  const q = document.getElementById('queue');
+  const items = state.drafts.slice().reverse();
+  if (items.length === 0) {
+    q.innerHTML = `<div class="empty-queue">No drafts yet. Start by clicking a scenario in the main panel.</div>`;
+    return;
+  }
+  q.innerHTML = items.map(d => {
+    const cls = d.kind === 'review' ? 'teal' : d.kind === 'lead' ? 'amber' : d.kind === 'seo' ? 'spark' : '';
+    const stamp = d.status === 'approved' ? 'approved' : '';
+    let label = '', sub = '';
+    if (d.kind === 'field') {
+      const sc = FIELD_SCENARIOS.find(s => s.id === d.scenario);
+      label = 'FIELD INTAKE'; sub = sc.title;
+    } else if (d.kind === 'review') {
+      const rv = REVIEW_SCENARIOS.find(r => r.id === d.scenario);
+      label = 'REVIEW REPLY'; sub = `${rv.rating}★ from ${rv.name}`;
+    } else if (d.kind === 'lead') {
+      const ld = LEAD_SCENARIOS.find(l => l.id === d.scenario);
+      label = 'LEAD TRIAGE'; sub = ld.name;
+    } else if (d.kind === 'seo') {
+      const t = SEO_TARGETS.find(x => x.id === d.scenario);
+      label = 'SEO PAGE'; sub = t.keyword;
+    }
+    return `
+      <div class="queue-item ${cls} ${stamp}" onclick="openDraft('${d.id}')">
+        <div class="qlabel">${label} ${d.status==='approved'?'· APPROVED':''}</div>
+        <div class="qttl">${escapeHtml(sub)}</div>
+        <div class="qsub">draft_${d.id}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  HANDLERS
+// ════════════════════════════════════════════════════════════════════════
+function setView(v) { state.view = v; saveState(); render(); }
+
+function processSimulation(label, then) {
+  const main = document.getElementById('main');
+  main.innerHTML = `
+    <div class="panel-title">Agent <em>·</em> running</div>
+    <div class="processing"><div class="spinner"></div><div class="step" id="proc-step">${label}</div></div>
+  `;
+  const steps = [label, '> Loading tenant config (jones)', '> Rendering brand-voice prompt', '> Calling Claude API', '> Parsing JSON output', '> Landing in approval queue'];
+  let i = 0;
+  const interval = setInterval(() => {
+    i++;
+    if (i >= steps.length) {
+      clearInterval(interval);
+      then();
+      return;
+    }
+    document.getElementById('proc-step').textContent = steps[i];
+  }, 380);
+}
+
+function runField(scenarioId) {
+  const sc = FIELD_SCENARIOS.find(s => s.id === scenarioId);
+  processSimulation('> Receiving foreman text-in via Twilio webhook', () => {
+    const id = uid();
+    state.drafts.push({
+      id,
+      kind: 'field',
+      scenario: scenarioId,
+      brand: sc.division === 'fab' ? 'callus' : 'jones',
+      status: 'pending',
+      outputs: {
+        linkedin: sc.drafts.linkedin,
+        linkedin_tags: sc.drafts.linkedin_tags,
+        gmb: sc.drafts.gmb,
+        gmb_cta: sc.drafts.gmb_cta,
+        instagram: sc.drafts.instagram,
+        instagram_tags: sc.drafts.instagram_tags,
+        blog: sc.drafts.blog,
+        blog_title: sc.drafts.blog_title,
+        newsletter: sc.drafts.newsletter
+      }
+    });
+    state.view = 'draft';
+    state.activeDraft = id;
+    saveState();
+    render();
+    toast('Field-to-Content drafted 5 outputs');
+  });
+}
+
+function runFieldCustom() {
+  const txt = document.getElementById('custom-field').value.trim();
+  if (!txt) { toast('Type something first'); return; }
+  // Find best-match scenario by simple keyword
+  const lower = txt.toLowerCase();
+  let pick = FIELD_SCENARIOS[0];
+  if (lower.includes('weld') || lower.includes('shop') || lower.includes('mig') || lower.includes('fab')) pick = FIELD_SCENARIOS[2];
+  else if (lower.includes('handrail') || lower.includes('stainless')) pick = FIELD_SCENARIOS[3];
+  else if (lower.includes('utilit') || lower.includes('sewer') || lower.includes('water') || lower.includes('storm')) pick = FIELD_SCENARIOS[1];
+  else pick = FIELD_SCENARIOS[0];
+  toast('Matched closest scenario: ' + pick.title);
+  runField(pick.id);
+}
+
+function runReview(rid) {
+  const rv = REVIEW_SCENARIOS.find(r => r.id === rid);
+  processSimulation('> New Google review detected', () => {
+    const id = uid();
+    state.drafts.push({
+      id, kind: 'review', scenario: rid, status: 'pending',
+      outputs: { ...rv.response }
+    });
+    state.view = 'draft';
+    state.activeDraft = id;
+    saveState();
+    render();
+    toast('Reputation agent drafted reply');
+  });
+}
+
+function runLead(lid) {
+  processSimulation('> Contact form submitted', () => {
+    const id = uid();
+    state.drafts.push({ id, kind: 'lead', scenario: lid, status: 'pending', outputs: {} });
+    state.view = 'draft';
+    state.activeDraft = id;
+    saveState();
+    render();
+    toast('Lead Triage agent processed');
+  });
+}
+
+function runSeo(tid) {
+  processSimulation('> Monthly SEO content cycle triggered', () => {
+    const id = uid();
+    state.drafts.push({ id, kind: 'seo', scenario: tid, status: 'pending', outputs: {} });
+    state.view = 'draft';
+    state.activeDraft = id;
+    saveState();
+    render();
+    toast('SEO Content agent drafted page');
+  });
+}
+
+function openDraft(id) {
+  state.view = 'draft';
+  state.activeDraft = id;
+  saveState();
+  render();
+}
+
+function updateDraft(id, key, value) {
+  const d = state.drafts.find(x => x.id === id);
+  if (!d) return;
+  d.outputs[key] = value;
+  saveState();
+}
+
+function approveAll(id) {
+  const d = state.drafts.find(x => x.id === id);
+  if (!d) return;
+  d.status = 'approved';
+  d.approved_at = new Date().toISOString();
+  saveState();
+  toast('Approved — published');
+  state.view = 'published';
+  render();
+}
+
+function rejectDraft(id) {
+  if (!confirm('Reject and delete this draft?')) return;
+  state.drafts = state.drafts.filter(x => x.id !== id);
+  saveState();
+  toast('Draft rejected');
+  state.view = ({field:'field',review:'reviews',lead:'leads',seo:'seo'})[
+    state.drafts.find(x=>x.id===id)?.kind || 'field'] || 'field';
+  render();
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  DICTATION — Web Speech API + brand-voice polish
+// ════════════════════════════════════════════════════════════════════════
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let activeRecognizer = null; // only one mic at a time
+let activeFieldKey = null;
+let activeDraftId = null;
+let recordStartedAt = 0;
+
+function micToggle(draftId, fieldKey) {
+  // Stop existing
+  if (activeRecognizer) {
+    try { activeRecognizer.stop(); } catch(e) {}
+    return;
+  }
+  if (!SpeechRecognition) {
+    toast('Voice capture not supported — try Chrome or Safari');
+    return;
+  }
+  const fid = `f_${draftId}_${fieldKey}`;
+  const micBtn = document.getElementById(`${fid}_mic`);
+  const lt = document.getElementById(`${fid}_lt`);
+  const ltFinal = lt.querySelector('.final');
+  const ltInterim = lt.querySelector('.interim');
+  ltFinal.textContent = '';
+  ltInterim.textContent = '';
+  lt.classList.add('active');
+  micBtn.classList.add('recording');
+  micBtn.title = 'Stop dictation';
+
+  const rec = new SpeechRecognition();
+  rec.continuous = true;
+  rec.interimResults = true;
+  rec.maxAlternatives = 3;
+  rec.lang = 'en-US';
+  let finalTranscript = '';
+  recordStartedAt = Date.now();
+
+  rec.onresult = (event) => {
+    let interim = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const result = event.results[i];
+      // Pick the alternative with the most recognized domain terms
+      const piece = pickBestAlternative(result);
+      if (result.isFinal) {
+        finalTranscript += piece + ' ';
+      } else {
+        interim += piece;
+      }
+    }
+    ltFinal.textContent = finalTranscript;
+    ltInterim.textContent = interim ? ' ' + interim : '';
+  };
+
+  rec.onerror = (event) => {
+    if (event.error === 'no-speech') return; // benign
+    toast('Mic error: ' + event.error);
+  };
+
+  rec.onend = () => {
+    micBtn.classList.remove('recording');
+    micBtn.title = 'Dictate';
+    lt.classList.remove('active');
+    activeRecognizer = null;
+    activeFieldKey = null;
+    activeDraftId = null;
+    const raw = (finalTranscript + ' ' + (ltInterim.textContent || '')).trim();
+    if (!raw) {
+      toast('Nothing captured');
+      return;
+    }
+    runPolish(draftId, fieldKey, raw, Math.round((Date.now() - recordStartedAt) / 1000));
+  };
+
+  try { rec.start(); }
+  catch (e) { toast('Could not start mic — check permissions'); micBtn.classList.remove('recording'); lt.classList.remove('active'); return; }
+  activeRecognizer = rec;
+  activeFieldKey = fieldKey;
+  activeDraftId = draftId;
+}
+
+function runPolish(draftId, fieldKey, raw, durationSec) {
+  const fid = `f_${draftId}_${fieldKey}`;
+  const polishEl = document.getElementById(`${fid}_polish`);
+  if (polishEl) polishEl.style.display = 'flex';
+
+  // Simulate Claude API call latency
+  setTimeout(() => {
+    const d = state.drafts.find(x => x.id === draftId);
+    if (!d) return;
+    const polished = polishTranscript(raw, fieldKey, d);
+    if (!d.dictation) d.dictation = {};
+    d.dictation[fieldKey] = {
+      raw: raw,
+      polished: polished,
+      view: 'polished',
+      duration: durationSec,
+      word_count: raw.split(/\s+/).filter(Boolean).length,
+      timestamp: new Date().toISOString()
+    };
+    d.outputs[fieldKey] = polished;
+    saveState();
+    if (polishEl) polishEl.style.display = 'none';
+    render();
+    const modeLabel = polishModeLabel(fieldKey, d);
+    toast('Polished · ' + modeLabel);
+  }, 1100);
+}
+
+// ─── Foreman intake mic (separate textarea, no draft) ─────────────
+function micToggleIntake() {
+  if (activeRecognizer) { try { activeRecognizer.stop(); } catch(e) {} return; }
+  if (!SpeechRecognition) { toast('Voice capture not supported — try Chrome or Safari'); return; }
+  const ta = document.getElementById('custom-field');
+  const micBtn = document.getElementById('custom-field_mic');
+  const lt = document.getElementById('custom-field_lt');
+  const ltFinal = lt.querySelector('.final');
+  const ltInterim = lt.querySelector('.interim');
+  ltFinal.textContent = '';
+  ltInterim.textContent = '';
+  lt.classList.add('active');
+  micBtn.classList.add('recording');
+
+  const rec = new SpeechRecognition();
+  rec.continuous = true;
+  rec.interimResults = true;
+  rec.maxAlternatives = 3;
+  rec.lang = 'en-US';
+  let finalTranscript = '';
+  recordStartedAt = Date.now();
+
+  rec.onresult = (event) => {
+    let interim = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const result = event.results[i];
+      const piece = pickBestAlternative(result);
+      if (result.isFinal) finalTranscript += piece + ' ';
+      else interim += piece;
+    }
+    ltFinal.textContent = finalTranscript;
+    ltInterim.textContent = interim ? ' ' + interim : '';
+  };
+  rec.onerror = (event) => { if (event.error !== 'no-speech') toast('Mic error: ' + event.error); };
+  rec.onend = () => {
+    micBtn.classList.remove('recording');
+    lt.classList.remove('active');
+    activeRecognizer = null;
+    const raw = (finalTranscript + ' ' + (ltInterim.textContent || '')).trim();
+    if (!raw) { toast('Nothing captured'); return; }
+
+    const polishEl = document.getElementById('custom-field_polish');
+    if (polishEl) polishEl.style.display = 'flex';
+    setTimeout(() => {
+      const polished = polishTranscript(raw, '__intake__', null);
+      ta.value = polished;
+      if (polishEl) polishEl.style.display = 'none';
+      toast('Cleaned up — ready to run agent');
+    }, 900);
+  };
+
+  try { rec.start(); }
+  catch(e) { toast('Could not start mic — check permissions'); micBtn.classList.remove('recording'); lt.classList.remove('active'); return; }
+  activeRecognizer = rec;
+}
+
+function dictView(draftId, fieldKey, which) {
+  const d = state.drafts.find(x => x.id === draftId);
+  if (!d || !d.dictation || !d.dictation[fieldKey]) return;
+  const dict = d.dictation[fieldKey];
+  dict.view = which;
+  d.outputs[fieldKey] = which === 'raw' ? dict.raw : dict.polished;
+  saveState();
+  render();
+}
+
+function polishModeLabel(fieldKey, d) {
+  if (!d) return 'foreman voice';
+  if (d.kind === 'review') return 'review reply · ' + (d.outputs.tier || '3-4 star');
+  if (d.kind === 'lead') return 'lead auto-reply';
+  if (d.kind === 'seo') return 'SEO content';
+  if (d.kind === 'field') {
+    if (fieldKey === 'linkedin')   return d.brand === 'callus' ? 'LinkedIn · Callus voice' : 'LinkedIn · Jones voice';
+    if (fieldKey === 'gmb')        return 'Google Business · friendly close';
+    if (fieldKey === 'instagram')  return 'Instagram · punchy + hashtags';
+    if (fieldKey === 'blog')       return 'Blog · long-form';
+    if (fieldKey === 'newsletter') return 'Internal newsletter · loose';
+  }
+  return 'brand voice';
+}
+
+// ─── Best-alternative picker ──────────────────────────────────────
+// Web Speech API can return multiple candidates per chunk. Pick the
+// one with the highest count of recognized domain terms — Spanish Fork
+// almost always beats "Spanish work" by this metric.
+const DOMAIN_VOCAB = [
+  'jones','callus','holladay','spanish fork','utah','salt lake','mapleton',
+  'wasatch','lehi','sandy','west jordan','kaysville','tooele','provo','orem',
+  'ogden','draper','american fork','heber','bountiful','layton','park city',
+  'udot','swppp','gbp','mig','tig','aws','aisc','osha','linkedin','google',
+  'mass-ex','cut-fill','subgrade','subbase','backfill','topsoil','grade',
+  'pad','foundation','utilities','sewer','storm','water main','rebar',
+  'concrete','asphalt','excavation','foreman','crew','operator','superintendent',
+  'aaron','steve','rico','marco','tony','manny','linda','brent','cassidy',
+  'rocky mountain','dominion','geneva rock','staker parson','sunroc','clyde',
+  'mobile welding','fabrication','handrail','conveyor','line bore','shop',
+  'truck','dozer','excavator','loader','grader','trackhoe','cat','komatsu',
+  'gc','pm','rfp','rfi','schedule','punch list','bid','estimate','quote'
+];
+function domainScore(text) {
+  const lower = text.toLowerCase();
+  let score = 0;
+  DOMAIN_VOCAB.forEach(term => { if (lower.includes(term)) score += 2 + term.length / 8; });
+  return score;
+}
+function pickBestAlternative(result) {
+  const alts = [];
+  for (let i = 0; i < result.length; i++) alts.push(result[i].transcript);
+  if (alts.length === 1) return alts[0];
+  // Score each — prefer domain match first, fall back to confidence
+  let best = alts[0];
+  let bestScore = domainScore(alts[0]);
+  for (let i = 1; i < alts.length; i++) {
+    const s = domainScore(alts[i]);
+    if (s > bestScore + 0.5) { best = alts[i]; bestScore = s; }
+  }
+  return best;
+}
+
+// ─── Domain term cleanup — fixes the common Web Speech mis-hears ────
+const DOMAIN_FIXES = [
+  // Mass excavation / earthwork
+  [/\bmass\s*(x|ex|axe|extra|excellent)\b/gi, 'mass-ex'],
+  [/\bcup\s*fill\b/gi, 'cut-fill'],
+  [/\bcup\s*and\s*fill\b/gi, 'cut and fill'],
+  [/\bsub\s*grade\b/gi, 'subgrade'],
+  [/\bsub\s*base\b/gi, 'subbase'],
+  [/\bback\s*fill\b/gi, 'backfill'],
+  [/\btoe\s*soil\b/gi, 'topsoil'],
+  [/\bre\s*bar\b/gi, 'rebar'],
+
+  // Welding / fab terms
+  [/\bm\s*i\s*g\b/gi, 'MIG'],
+  [/\bt\s*i\s*g\b/gi, 'TIG'],
+  [/\bfilly\s*bead\b/gi, 'fillet bead'],
+  [/\bweld\s*scene\b/gi, 'weld seam'],
+  [/\bo\s*f\s*c\s*a\b/gi, 'OFC-A'],
+
+  // Acronyms (often spelled out as letters)
+  [/\bg\s*b\s*p\b/gi, 'GBP'],
+  [/\bs\s*w\s*p+\b/gi, 'SWPPP'],
+  [/\boh?\s*sha\b/gi, 'OSHA'],
+  [/\ba\s*w\s*s\b/gi, 'AWS'],
+  [/\ba\s*i\s*s\s*c\b/gi, 'AISC'],
+  [/\bg\s*c\b(?=\s|$|[.,])/gi, 'GC'],
+  [/\bp\s*m\b(?=\s|$|[.,])/gi, 'PM'],
+  [/\br\s*f\s*p\b/gi, 'RFP'],
+  [/\br\s*f\s*i\b/gi, 'RFI'],
+  [/\bp\s*p\s*e\b/gi, 'PPE'],
+
+  // Utah place names
+  [/\bspanish\s*(work|fort|fourth|board|fork)\b/gi, 'Spanish Fork'],
+  [/\bsalt\s*(lake|lick)\b/gi, 'Salt Lake'],
+  [/\b(layhi|lay\s*hi|lay\s*high|lehigh|lay\s*hee|leehi|le\s*hi|lehi)\b/gi, 'Lehi'],
+  [/\b(maple\s*tin|maple\s*ten|maple\s*town|mapleton)\b/gi, 'Mapleton'],
+  [/\b(washsatch|wash\s*satch|wassatch|wasatch)\b/gi, 'Wasatch'],
+  [/\b(toe\s*welly|to\s*welly|to\s*we\s*lay|tooele|tuwilla)\b/gi, 'Tooele'],
+  [/\bk\s*ays?\s*ville\b/gi, 'Kaysville'],
+  [/\bwest\s*(jordan|jourdan|jordon)\b/gi, 'West Jordan'],
+  [/\bsouth\s*jordan\b/gi, 'South Jordan'],
+  [/\bamerican\s*fork\b/gi, 'American Fork'],
+  [/\b(park\s*city|provo|orem|ogden|draper|sandy|murray|heber|bountiful|layton)\b/gi,
+    m => m.replace(/\b\w/g, c => c.toUpperCase())],
+
+  // Brand names
+  [/\b(jonze|jonas|joanne's|joneses|jones')\b/gi, 'Jones'],
+  [/\b(colas|callous|cylis|kalu's|callouses|callus's)\b/gi, 'Callus'],
+  [/\bholiday\s*(builder|builders)\b/gi, 'Holladay Builders'],
+  [/\bgeneva\s*rock\b/gi, 'Geneva Rock'],
+  [/\bsta(c?ker?|kers)\s*parson?s?\b/gi, 'Staker Parson'],
+  [/\bs(un|un's)\s*roc\b/gi, 'Sunroc'],
+  [/\bclyde('?s)?\s*(companies|company)?\b/gi, 'W.W. Clyde'],
+  [/\brocky\s*mountain\s*power\b/gi, 'Rocky Mountain Power'],
+  [/\bdominion\s*energy\b/gi, 'Dominion Energy'],
+
+  // People (when said in context; first-letter cap is preserved by sentence-case pass too)
+  [/\b(aaron|erin|aaran|airon)\b/gi, 'Aaron'],
+  [/\b(stephen|steven|steve)\b/gi, 'Steve'],
+  [/\b(rico|ricco)\b/gi, 'Rico'],
+  [/\b(mark\s*o|marko|marco)\b/gi, 'Marco'],
+  [/\b(tony|tonee)\b/gi, 'Tony'],
+  [/\b(manny|manni|mannie)\b/gi, 'Manny'],
+  [/\b(linda|lynda)\b/gi, 'Linda'],
+
+  // Unit shorthand
+  [/\b(\d+)\s*(linear\s*foot|linear\s*feet|l\s*f)\b/gi, '$1 LF'],
+  [/\b(\d+)\s*(cubic\s*yards?|c\s*y)\b/gi, '$1 CY'],
+  [/\bsquare\s*foot\b/gi, 'sq ft'],
+  [/\bsquare\s*feet\b/gi, 'sq ft'],
+
+  // Hand-holds for common foreman phrasing
+  [/\bgeneral(ly)?\s*contractor\b/gi, 'general contractor'],
+  [/\b(supe|sup|soup)\s+(said|told|wants|ran)\b/gi, 'super $2'],
+  [/\b(punchy?\s*list)\b/gi, 'punch list'],
+];
+
+function applyDomainFixes(text) {
+  for (const [pat, rep] of DOMAIN_FIXES) {
+    text = text.replace(pat, rep);
+  }
+  return text;
+}
+
+// ─── Spoken number → digits ───────────────────────────────────────
+const NUM_WORDS = {
+  zero:0, one:1, two:2, three:3, four:4, five:5, six:6, seven:7, eight:8, nine:9,
+  ten:10, eleven:11, twelve:12, thirteen:13, fourteen:14, fifteen:15,
+  sixteen:16, seventeen:17, eighteen:18, nineteen:19,
+  twenty:20, thirty:30, forty:40, fifty:50, sixty:60, seventy:70, eighty:80, ninety:90
+};
+function wordsToNum(seq) {
+  // seq: array of lowercase words. Returns integer or null.
+  if (seq.length === 0) return null;
+  let total = 0, current = 0;
+  for (const w of seq) {
+    if (w === 'and') continue;
+    if (w === 'hundred') {
+      current = (current || 1) * 100;
+    } else if (w === 'thousand') {
+      total += (current || 1) * 1000;
+      current = 0;
+    } else if (w === 'million') {
+      total += (current || 1) * 1000000;
+      current = 0;
+    } else if (NUM_WORDS[w] != null) {
+      current += NUM_WORDS[w];
+    } else {
+      return null;
+    }
+  }
+  total += current;
+  return total > 0 ? total : null;
+}
+function normalizeNumbers(text) {
+  // Find sequences of number words and replace with digits.
+  const numWordSet = new Set(Object.keys(NUM_WORDS).concat(['hundred','thousand','million','and']));
+  return text.replace(/\b(?:[a-z]+(?:\s+[a-z]+)*)\b/gi, (match) => {
+    const words = match.toLowerCase().split(/\s+/);
+    // Only attempt if all words are number words AND length > 1 (single "two" stays as "two")
+    if (words.every(w => numWordSet.has(w)) && words.length > 1) {
+      const n = wordsToNum(words);
+      if (n != null) {
+        // Format with commas if >= 1000
+        return n >= 1000 ? n.toLocaleString('en-US') : String(n);
+      }
+    }
+    return match;
+  });
+}
+
+// ─── Master transcript cleanup pass ───────────────────────────────
+function cleanTranscript(raw) {
+  let t = raw.trim();
+  // Whitespace
+  t = t.replace(/\s+/g, ' ').replace(/\s+([,.!?;:])/g, '$1');
+  // Numbers first (so "eighteen thousand yards" → "18,000 yards" before
+  // domain pass converts "yards" to "CY")
+  t = normalizeNumbers(t);
+  // Domain dictionary
+  t = applyDomainFixes(t);
+  return t;
+}
+
+/**
+ * polishTranscript — multi-mode brand-voice cleanup.
+ *
+ * Branches on (fieldKey, draft.kind, draft.brand) to apply the right
+ * rules per channel. In production this is a single Claude API call
+ * with the matching tenant prompt; the rule-based version below mimics
+ * what Claude would do per channel for the demo.
+ */
+function polishTranscript(raw, fieldKey, draft) {
+  raw = cleanTranscript(raw);
+  let mode = 'general';
+  let brand = (draft && draft.brand) || 'jones';
+  if (!draft && fieldKey === '__intake__') mode = 'foreman';
+  else if (draft && draft.kind === 'field') {
+    mode = ({linkedin:'linkedin', gmb:'gmb', instagram:'instagram',
+             blog:'blog', newsletter:'newsletter'})[fieldKey] || 'general';
+  }
+  else if (draft && draft.kind === 'review') mode = 'review';
+  else if (draft && draft.kind === 'lead')   mode = 'autoreply';
+  else if (draft && draft.kind === 'seo')    mode = 'seo';
+
+  // ─── Pass 1 — universal cleanup ──────────────────────────────────
+  let text = raw.trim();
+
+  const fillers = /\b(uh+|um+|er+|ah+|hmm+|like|you know|i mean|basically|literally|sorta|kinda|sort of|kind of|right\?|y'know|yeah|so so)\b[,]?\s*/gi;
+  text = text.replace(fillers, '');
+  // collapse repeated words
+  text = text.replace(/\b(\w+)(\s+\1\b)+/gi, '$1');
+  // normalize whitespace + spacing before punctuation
+  text = text.replace(/\s+/g, ' ').trim();
+  text = text.replace(/\s+([,.!?;:])/g, '$1');
+
+  // capitalize known nouns (names, places, brands, equipment)
+  const PROPER = [
+    // people
+    'brent','cassidy','aaron','steve','rico','marco','tony','manny','linda','jen',
+    // brands
+    'jones','callus','holladay builders','wm. clyde','geneva rock','staker parson','sunroc','sunco','suncore',
+    // utah places
+    'spanish fork','utah county','utah','salt lake','mapleton','wasatch','wasatch front',
+    'lehi','sandy','west jordan','kaysville','tooele','provo','orem','ogden','draper',
+    'south jordan','american fork','bountiful','layton','heber','park city',
+    // utility / regulatory
+    'udot','rocky mountain power','dominion energy','aws','aisc','swppp','agc',
+    'mig','tig','osha',
+    // equipment slang (capitalize where appropriate)
+    'cat','komatsu','john deere','kenworth','peterbilt'
+  ];
+  PROPER.forEach(name => {
+    const re = new RegExp('\\b' + name.replace(/ /g, '\\s+') + '\\b', 'gi');
+    text = text.replace(re, name.replace(/\b\w/g, c => c.toUpperCase()));
+  });
+  // pronoun "I" forms
+  text = text.replace(/\bi\b/g, 'I');
+  text = text.replace(/\bi'(m|ll|ve|d)\b/gi, "I'$1");
+  // sentence-case
+  text = text.replace(/(^|[.!?]\s+)([a-z])/g, (_, p1, p2) => p1 + p2.toUpperCase());
+  if (!/[.!?]$/.test(text)) text += '.';
+
+  // ─── Pass 2 — mode-specific shaping ──────────────────────────────
+  const lower = text.toLowerCase();
+
+  if (mode === 'foreman') {
+    // Foreman voice: keep punchy. Strip leading "so" / "yeah".
+    text = text.replace(/^(So,?\s+|Yeah,?\s+|Okay,?\s+|Alright,?\s+|All right,?\s+)/i, '');
+    // Normalize common dictation slang
+    text = text.replace(/\bthousand\s+yards?\b/gi, 'k yards');
+    text = text.replace(/\bcubic\s+yards?\b/gi, 'CY');
+    return text;
+  }
+
+  if (mode === 'linkedin') {
+    // Ensure full-sentence cadence; allow ~3-4 sentences
+    if (text.length < 280) {
+      const close = brand === 'callus'
+        ? ' Built by hand. Built to last.'
+        : ' Since 1990.';
+      if (!/since 1990|built by hand/i.test(text)) text = text.replace(/\.$/, close);
+    }
+    // Ensure hashtag tail if none present
+    if (!/#\w/.test(text)) {
+      const tags = brand === 'callus'
+        ? '\n\n#MobileWelding #CustomFabrication #Wasatch'
+        : '\n\n#HeavyCivil #UtahConstruction #SiteWork';
+      text += tags;
+    }
+    return text;
+  }
+
+  if (mode === 'gmb') {
+    // Friendly close
+    if (!/give\s+us\s+a\s+call|reach\s+out|we'?d\s+be\s+glad|drop\s+us\s+a\s+line/i.test(text)) {
+      text = text.replace(/\.$/, '. If you\'ve got a project coming up, we\'d be glad to talk.');
+    }
+    // GMB caps at 1500 chars but typical is short
+    if (text.length > 600) text = text.slice(0, 580).replace(/[^.!?]*$/, '') + '…';
+    return text;
+  }
+
+  if (mode === 'instagram') {
+    // Punchy: allow fragments, keep short
+    // Sign-off if missing
+    const sig = brand === 'callus' ? ' — Callus shop crew' : ' — the Jones crew';
+    if (!/—\s*(the\s+)?(Jones|Callus)/i.test(text)) {
+      text = text.replace(/\.$/, sig);
+    }
+    if (!/#\w/.test(text)) {
+      const tags = brand === 'callus'
+        ? '\n\n#mobilewelder #shoplife #wasatchfront #builttough'
+        : '\n\n#yellowiron #dirtwork #utahbuilt #since1990';
+      text += tags;
+    }
+    return text;
+  }
+
+  if (mode === 'blog') {
+    // Full sentences, insert paragraph break after first ~2-3 sentences
+    const sentences = text.split(/(?<=[.!?])\s+/);
+    if (sentences.length >= 4) {
+      const split = Math.ceil(sentences.length / 2);
+      text = sentences.slice(0, split).join(' ') + '\n\n' + sentences.slice(split).join(' ');
+    }
+    return text;
+  }
+
+  if (mode === 'newsletter') {
+    // Internal voice — leave loose, but tighten openers
+    text = text.replace(/^(Just\s+|Also,?\s+|And\s+)/i, '');
+    return text;
+  }
+
+  if (mode === 'review') {
+    const tier = (draft && draft.outputs && draft.outputs.tier) || '3_4_star';
+    if (tier === '1_2_star') {
+      // mandatory named-contact close
+      if (!/call\s+(steve|the\s+office)|reach\s+out|give\s+(us|steve)\s+a\s+call/i.test(text)) {
+        text = text.replace(/\.$/, '. Please give Steve a call at the office so we can look into it directly.');
+      }
+    } else if (tier === '3_4_star') {
+      if (/sorry|apolog|frustrat|disappoint/i.test(lower) && !/call|reach/i.test(lower)) {
+        text = text.replace(/\.$/, '. If you want to walk through what could\'ve gone better, give Steve a call.');
+      }
+    } else if (tier === '5_star') {
+      if (text.length < 80) text = text.replace(/\.$/, '. We\'ll pass it along to the crew.');
+    }
+    return text;
+  }
+
+  if (mode === 'autoreply') {
+    if (!/—\s*(Jones|Callus)/.test(text)) {
+      const sig = brand === 'callus' ? '\n\n— ' : '\n\n— Toone Construction Co.';
+      text += sig;
+    }
+    return text;
+  }
+
+  if (mode === 'seo') {
+    // Expand contractions + tighten
+    text = text.replace(/\bdon't\b/g,'do not').replace(/\bcan't\b/g,'cannot').replace(/\bwon't\b/g,'will not')
+               .replace(/\bit's\b/g,'it is').replace(/\bwe're\b/g,'we are').replace(/\bthey're\b/g,'they are');
+    return text;
+  }
+
+  return text;
+}
+window.micToggle = micToggle;
+window.dictView = dictView;
+window.micToggleIntake = micToggleIntake;
+
+// ════════════════════════════════════════════════════════════════════════
+//  UTIL
+// ════════════════════════════════════════════════════════════════════════
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  WIRE UP
+// ════════════════════════════════════════════════════════════════════════
+document.querySelectorAll('.nav-item').forEach(b => {
+  b.addEventListener('click', () => {
+    state.view = b.dataset.view;
+    saveState();
+    render();
+  });
+});
+
+render();
+</script>
+
+<div style="text-align:center;padding:18px 24px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);background:var(--panel);font-family:Inter,system-ui,sans-serif;">
+  &copy; 2026&nbsp; JTC Communications &amp; Consulting, LLC and Coolnerd, LLC
+</div>
+
+</body>
+</html>

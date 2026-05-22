@@ -1,0 +1,110 @@
+{
+  "_comment": "The single source of truth for the proposal template. To re-skin for a new prospect, edit the values below and re-run `python3 proposal/build_proposal.py`. The Toone Construction Co. values are the default fictional case study.",
+
+  "company": {
+    "name": "Toone Construction Co.",
+    "short_name": "Toone Construction",
+    "tagline": "Commercial &amp; civil contracting. Built on the work.",
+    "founded": 1990,
+    "heritage_years": 35,
+    "structure": "single_brand",
+    "category": "Commercial &amp; Civil General Contractor",
+    "primary_market": "Utah",
+    "service_radius": "Wasatch Front + statewide on civil work",
+    "domain": "tooneconstruction.com"
+  },
+
+  "services": {
+    "commercial": [
+      "Tilt-up and pre-engineered commercial buildings",
+      "Public works: schools, libraries, civic buildings",
+      "Tenant improvements and adaptive reuse",
+      "Healthcare and education"
+    ],
+    "civil": [
+      "Site preparation and earthwork",
+      "Utilities and underground",
+      "Roadwork and infrastructure",
+      "Storm drainage and detention"
+    ]
+  },
+
+  "voice": {
+    "tone": "Direct, plainspoken, no-jargon. Mid-tier heritage — we have history but we are not coasting on it. We answer the phone. We hit the dates.",
+    "we_dont_say": ["world-class", "innovative solutions", "synergy", "trusted partner", "passionate about"],
+    "we_do_say": ["on time, on budget", "the work speaks", "we build what you'll use for 50 years", "phone gets answered"]
+  },
+
+  "comp_set": {
+    "_comment": "LinkedIn follower benchmarks for Utah commercial/civil GCs. Real numbers researched for the Jones engagement; reusable here.",
+    "competitors": [
+      {"name": "Big-D Construction", "linkedin_followers": 19000},
+      {"name": "Layton Construction", "linkedin_followers": 14500},
+      {"name": "Okland Construction", "linkedin_followers": 8200},
+      {"name": "R&O Construction", "linkedin_followers": 4100},
+      {"name": "Hogan & Associates", "linkedin_followers": 2300},
+      {"name": "Jacobsen Construction", "linkedin_followers": 6800},
+      {"name": "Westland Construction", "linkedin_followers": 1300}
+    ],
+    "tenant_starting_followers": 412,
+    "tenant_starting_reviews": 9,
+    "tenant_starting_rating": 4.6,
+    "tenant_starting_photos": 3,
+    "tenant_starting_reply_rate": 0,
+    "tenant_starting_sa_pages": 0
+  },
+
+  "pricing": {
+    "build": {
+      "brand_refresh": 7500,
+      "website": 22500,
+      "seo_foundation": 5000,
+      "photography": 7500,
+      "content_engine": 5000
+    },
+    "mos_build": 17700,
+    "mos_retainer": {
+      "concierge_monthly": 0,
+      "concierge_note": "Included in the Marketing Operating System build",
+      "copilot_monthly": 850,
+      "copilot_note": "Infrastructure included",
+      "selfserve_monthly": 350,
+      "selfserve_hourly": 150,
+      "selfserve_note": "or $150/hour, whichever is less",
+      "infra_estimate": 200
+    }
+  },
+
+  "target_keywords": [
+    "commercial general contractor utah",
+    "tilt-up construction salt lake city",
+    "school construction utah",
+    "civil contractor wasatch front",
+    "tenant improvement contractor utah",
+    "site preparation utah"
+  ],
+
+  "case_studies": [
+    {"project": "Mountain View Elementary", "type": "Public works", "value": "$14.2M", "year": 2024, "scope": "78,000 sf K-6 school, design-build delivery, 14 months"},
+    {"project": "Riverbend Industrial Park", "type": "Tilt-up commercial", "value": "$8.7M", "year": 2024, "scope": "Three 30,000 sf flex buildings, site work included"},
+    {"project": "SR-201 Frontage Utilities", "type": "Civil", "value": "$3.4M", "year": 2023, "scope": "Wet utility relocation under active roadway"}
+  ],
+
+  "brand": {
+    "primary_color": "#1F3A5F",
+    "primary_color_name": "Deep Steel Blue",
+    "accent_color": "#D97E2A",
+    "accent_color_name": "Construction Orange",
+    "neutral_dark": "#1A1D21",
+    "neutral_light": "#F4F2EE"
+  },
+
+  "proposal_meta": {
+    "version": "v1",
+    "prepared_by": "JTC Communications & Consulting, LLC and Coolnerd, LLC",
+    "year": 2026,
+    "month": "May",
+    "engagement_days": 90,
+    "build_total_label": "$65,200"
+  }
+}

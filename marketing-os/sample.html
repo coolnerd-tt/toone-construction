@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Marketing Operating System — Sample Output</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0C0E10;
+    --panel: #161A1D;
+    --panel-2: #1F2428;
+    --border: #2A2F33;
+    --text: #F4F2EE;
+    --muted: #8A8880;
+    --orange: #E8621A;
+    --amber: #F5A623;
+    --teal: #3D9BAD;
+    --spark: #D93B18;
+    --green: #6FB65A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 60px 24px;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(44px, 6.5vw, 80px);
+    font-weight: 900;
+    line-height: 0.95;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  h1 em { font-style: normal; color: var(--orange); }
+
+  .lede {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 720px;
+    margin-bottom: 14px;
+  }
+  .lede strong { color: var(--text); font-weight: 500; }
+
+  .runtime-note {
+    background: var(--panel);
+    border-left: 3px solid var(--amber);
+    padding: 16px 20px;
+    margin-top: 24px;
+    margin-bottom: 60px;
+    font-size: 13.5px;
+    color: var(--text);
+    max-width: 820px;
+  }
+  .runtime-note .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--amber);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .runtime-note code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: var(--bg);
+    padding: 1px 6px;
+    border-radius: 2px;
+    color: var(--amber);
+  }
+
+  /* Step blocks */
+  .step {
+    margin-bottom: 70px;
+    border-top: 1px solid var(--border);
+    padding-top: 40px;
+  }
+  .step-head {
+    display: flex;
+    gap: 18px;
+    align-items: baseline;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+  }
+  .step-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 38px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.005em;
+  }
+  .step-title em { font-style: normal; color: var(--orange); }
+  .step-sub {
+    font-size: 14px;
+    color: var(--muted);
+    flex-basis: 100%;
+    margin-top: 4px;
+  }
+
+  /* Input card — looks like an iMessage from a foreman */
+  .imessage {
+    background: var(--panel);
+    border-radius: 18px;
+    padding: 22px 24px;
+    max-width: 480px;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .imessage::before {
+    content: 'TONY · FOREMAN · 4:47 PM';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .imessage p {
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .imessage .photos {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .imessage .photo {
+    flex: 1;
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(135deg, #2A2F33, #1A1E22);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Output cards */
+  .outputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 18px;
+  }
+  .output-card {
+    background: var(--panel);
+    border-left: 3px solid var(--orange);
+    padding: 22px 24px;
+  }
+  .output-card.teal  { border-left-color: var(--teal); }
+  .output-card.spark { border-left-color: var(--spark); }
+  .output-card.amber { border-left-color: var(--amber); }
+  .output-card.green { border-left-color: var(--green); }
+
+  .channel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--orange);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .output-card.teal  .channel { color: var(--teal); }
+  .output-card.spark .channel { color: var(--spark); }
+  .output-card.amber .channel { color: var(--amber); }
+  .output-card.green .channel { color: var(--green); }
+
+  .body-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+  .meta-line {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+  .meta-line strong { color: var(--text); font-weight: 500; }
+  .hashtags {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--orange);
+    margin-top: 6px;
+  }
+  .blog-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  /* Single-column wide outputs (review reply, lead triage, SEO page) */
+  .wide-output {
+    background: var(--panel);
+    border-left: 3px solid var(--orange);
+    padding: 26px 28px;
+    margin-bottom: 14px;
+  }
+  .wide-output.teal  { border-left-color: var(--teal); }
+  .wide-output.spark { border-left-color: var(--spark); }
+  .wide-output.amber { border-left-color: var(--amber); }
+
+  .review-block {
+    background: var(--panel-2);
+    padding: 16px 20px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+  }
+  .review-block .stars {
+    color: var(--amber);
+    letter-spacing: 0.1em;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  .review-block .name {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .review-block .text { font-size: 14px; color: var(--text); }
+
+  /* SEO mocked page */
+  .seo-mock {
+    background: var(--panel-2);
+    padding: 28px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .seo-mock h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .seo-mock .meta-desc {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .seo-mock h4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    color: var(--orange);
+  }
+  .seo-mock p { font-size: 13.5px; color: var(--text); margin-bottom: 10px; }
+  .seo-mock .faq {
+    background: var(--bg);
+    padding: 12px 16px;
+    border-radius: 3px;
+    margin-top: 8px;
+    border-left: 2px solid var(--orange);
+  }
+  .seo-mock .faq .q { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .seo-mock .faq .a { font-size: 13px; color: var(--muted); }
+
+  /* Approval row */
+  .approval-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 18px;
+    padding: 14px 18px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  .approval-row .pill {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+  .pill.pending { background: rgba(245,166,35,0.15); color: var(--amber); }
+  .pill.approve { background: rgba(111,182,90,0.18); color: var(--green); }
+  .approval-row .draft-id { color: var(--muted); }
+  .approval-row .actions { margin-left: auto; display: flex; gap: 8px; }
+  .approval-row .btn {
+    padding: 5px 12px;
+    border-radius: 3px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .btn.approve { background: var(--green); color: var(--bg); }
+  .btn.edit { border: 1px solid var(--border); color: var(--muted); }
+
+  /* CTA + footer */
+  .closing {
+    margin-top: 80px;
+    padding: 36px;
+    background: var(--panel);
+    border-left: 3px solid var(--orange);
+  }
+  .closing h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .closing p { font-size: 14px; color: var(--muted); margin-bottom: 8px; }
+
+  .footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer a { color: var(--orange); text-decoration: none; }
+
+  @media (max-width: 700px) {
+    body { padding: 40px 16px; }
+    .step-title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">Marketing Operating System · Live Sample · v4</div>
+    <h1>One foreman text.<br/><em>Five published artifacts.</em></h1>
+    <p class="lede">
+      Below is real, unedited output from the Marketing Operating System scaffold running on Jones tenant config.
+      Each section shows the input, what the agent drafted, and where it lands in the approval queue.
+      <strong>Nothing publishes without a human click.</strong>
+    </p>
+    <div class="runtime-note">
+      <span class="lbl">How this was generated</span>
+      Output captured from <code>python demo.py --dry-run</code> against
+      <code>tenants/jones/</code>. Live mode (<code>ANTHROPIC_API_KEY</code> set) makes real Claude
+      calls; dry-run uses canned outputs designed to match what production drafts look like.
+    </div>
+
+    <!-- ═══ STEP 1: Field-to-Content ═══════════════════════════════════════ -->
+    <div class="step">
+      <div class="step-head">
+        <span class="step-num">STEP 01</span>
+        <span class="step-title">Field <em>→</em> Content</span>
+        <span class="step-sub">Foreman texts in. Agent drafts five channel-specific outputs in Jones voice.</span>
+      </div>
+
+      <div class="imessage">
+        <p>Wrapped mass-ex on the Spring Creek Commerce Pad in Spanish Fork today. ~18,000 yards moved, cut-fill balanced on site, no haul-off. Two weather days but we held grade. Crew killed it.</p>
+        <div class="photos">
+          <div class="photo">photo_01.jpg</div>
+          <div class="photo">photo_02.jpg</div>
+          <div class="photo">photo_03.jpg</div>
+        </div>
+      </div>
+
+      <div style="margin: 28px 0 18px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: var(--muted);">
+        ↓ FIELD-TO-CONTENT AGENT · DRAFT 422b3630b092 · 4 channels + newsletter
+      </div>
+
+      <div class="outputs">
+        <div class="output-card">
+          <div class="channel">LinkedIn · Jones</div>
+          <p class="body-text">Wrapped mass excavation on Spring Creek Commerce Pad in Spanish Fork, Utah County this week — roughly 18,000 cubic yards moved, cut-fill balanced on site, no haul-off. The crew kept the pad on grade through two days of weather that wanted otherwise. Thanks to the GC for keeping the schedule honest and to our operators for reading the dirt right. On to subgrade next week. Since 1990.</p>
+          <div class="hashtags">#HeavyCivil &nbsp; #UtahConstruction &nbsp; #SiteWork</div>
+        </div>
+
+        <div class="output-card teal">
+          <div class="channel">Google Business Profile</div>
+          <p class="body-text">Crew wrapped the dirt phase on Spring Creek Commerce Pad over in Spanish Fork, Utah County. Pad's on grade, site's clean, and we're set up for utilities next. If you've got a commercial pad coming up on the Wasatch Front, we'd be glad to talk.</p>
+          <div class="meta-line"><strong>CTA:</strong> Get quote — Request a bid</div>
+        </div>
+
+        <div class="output-card spark">
+          <div class="channel">Instagram + Facebook cross-post</div>
+          <p class="body-text">Eighteen thousand yards later, Spring Creek Commerce Pad is on grade. Two weather days, one cut-fill plan, zero haul-off. Hood down. Heads up. — the Jones crew</p>
+          <div class="hashtags">#yellowiron &nbsp; #dirtwork &nbsp; #utahbuilt &nbsp; #since1990</div>
+        </div>
+
+        <div class="output-card amber">
+          <div class="channel">Blog snippet (tooneconstruction.com)</div>
+          <div class="blog-title">Mass Excavation in Spanish Fork: How We Balanced Cut-Fill on Spring Creek Commerce Pad</div>
+          <p class="body-text">Mass excavation on a tight commercial pad in Spanish Fork, Utah County comes down to two things: reading the dirt and reading the schedule. On Spring Creek Commerce Pad, our crew moved roughly 18,000 cubic yards over six working days, balancing cut-and-fill on site to avoid import or haul-off costs.</p>
+          <p class="body-text">GPS-guided iron does the math; experienced operators do the judgment. We coordinated with the GC's surveyor daily, kept stockpiles staged away from the future utility corridor, and turned over a clean pad on grade — ready for the wet utilities crew without a punch list.</p>
+        </div>
+
+        <div class="output-card green">
+          <div class="channel">Internal newsletter</div>
+          <p class="body-text">Big week for the Spring Creek Commerce Pad crew — Tony, Manny, and the operators wrapped the mass-ex phase on grade and on schedule, balancing cut-fill with no import. Two weather days didn't stop them. Utilities phase kicks off Monday. Nice work, all.</p>
+        </div>
+      </div>
+
+      <div class="approval-row">
+        <span class="pill pending">PENDING</span>
+        <span class="draft-id">draft_422b3630b092</span>
+        <span style="color: var(--muted)">5 outputs · queued for office manager</span>
+        <div class="actions">
+          <span class="btn edit">EDIT</span>
+          <span class="btn approve">APPROVE ALL</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 2: Reputation ════════════════════════════════════════════ -->
+    <div class="step">
+      <div class="step-head">
+        <span class="step-num">STEP 02</span>
+        <span class="step-title">Reputation <em>·</em> Review reply</span>
+        <span class="step-sub">A 3★ Google review comes in. Agent drafts a measured response and flags an internal callback.</span>
+      </div>
+
+      <div class="review-block">
+        <div class="stars">★★★☆☆</div>
+        <div class="name">BRENT M. · 3 stars · Google · 2 days ago</div>
+        <div class="text">"Work itself was solid — they got the pad ready on time. Communication on the back end could've been a lot better, took multiple calls to figure out the punch list status."</div>
+      </div>
+
+      <div class="wide-output teal">
+        <div class="channel" style="color: var(--teal)">Reputation Agent · tier: 3-4 star</div>
+        <p class="body-text">Appreciate the honest read, Brent. Glad the work itself landed; the communication gap on the back end is on us to tighten up. If you want to walk through what could've gone better, give Steve a call at the office — he'd want to hear it directly.</p>
+        <div class="meta-line"><strong>Internal note:</strong> Loop Steve in for a callback within 48 hrs.</div>
+        <div class="meta-line"><strong>Escalate:</strong> false</div>
+      </div>
+
+      <div class="approval-row">
+        <span class="pill pending">PENDING</span>
+        <span class="draft-id">draft_ce900eb80c86</span>
+        <span style="color: var(--muted)">Auto-routes to Steve on approve</span>
+        <div class="actions">
+          <span class="btn edit">EDIT</span>
+          <span class="btn approve">APPROVE</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 3: Lead Triage ══════════════════════════════════════════ -->
+    <div class="step">
+      <div class="step-head">
+        <span class="step-num">STEP 03</span>
+        <span class="step-title">Lead <em>·</em> Site form triage</span>
+        <span class="step-sub">Inquiry hits the contact form. Agent classifies, routes, and drafts the auto-reply.</span>
+      </div>
+
+      <div class="review-block">
+        <div class="name">CONTACT FORM · tooneconstruction.com · 11 minutes ago</div>
+        <div class="text">"Hi — Cassidy Larsen with Holladay Builders. We've got a 14-lot subdivision off Old Mill Road, looking at moving roughly 6k yards of dirt this fall. Got someone I can talk to about getting on a bid list?"</div>
+      </div>
+
+      <div class="wide-output amber">
+        <div class="channel" style="color: var(--amber)">Lead Triage Agent</div>
+        <div class="meta-line" style="margin-top:0; margin-bottom:12px">
+          <strong>Classification:</strong> excavation &nbsp;·&nbsp;
+          <strong>Confidence:</strong> 0.82 &nbsp;·&nbsp;
+          <strong>Urgency:</strong> warm
+        </div>
+
+        <div class="meta-line" style="background:var(--panel-2); padding:12px 16px; margin-bottom:12px">
+          🟡 New excavation inquiry from <strong>Cassidy Larsen, Holladay Builders</strong> — see message in inbox.<br/>
+          Suggested owner: <strong>Aaron (Estimating)</strong>.
+        </div>
+
+        <div class="meta-line"><strong>Auto-reply email:</strong></div>
+        <p class="body-text" style="background:var(--panel-2); padding:14px 16px; border-radius:3px; margin-top:6px">
+          <strong>Subject:</strong> Got your note — we'll be in touch<br/><br/>
+          Thanks for reaching out — got your note here.<br/>
+          Aaron (Estimating) will follow up within one business day.<br/>
+          — Jones, Toone Construction Co. &amp; 
+        </p>
+
+        <div class="meta-line"><strong>Next action:</strong> Route to Aaron (Estimating) and confirm callback within 24 hrs.</div>
+      </div>
+
+      <div class="approval-row">
+        <span class="pill approve">AUTO-APPROVED</span>
+        <span class="draft-id">draft_24498712b9d9</span>
+        <span style="color: var(--muted)">Auto-reply already sent · alert posted to #estimating</span>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 4: SEO Content ═════════════════════════════════════════ -->
+    <div class="step">
+      <div class="step-head">
+        <span class="step-num">STEP 04</span>
+        <span class="step-title">SEO <em>·</em> Service-area page</span>
+        <span class="step-sub">Monthly. Agent drafts a full service-area page targeted at a ranking gap.</span>
+      </div>
+
+      <div class="seo-mock">
+        <h3>Excavation Contractor in Utah — Toone Construction Co.</h3>
+        <div class="meta-desc">
+          <strong>Meta description:</strong> Toone Construction Co. handles commercial site work, mass excavation,
+          and utilities across Utah. Family-run since 1990. Call for a bid.
+        </div>
+        <p>We move dirt across Utah for commercial pads, subdivisions, and public work. Four generations on the same yard in Mapleton, Utah. If it involves a track hoe, a pay item, and a tight schedule, we're at home.</p>
+
+        <h4>Scope: What We Self-Perform</h4>
+        <p>Mass excavation, stripping topsoil to subgrade, cut-fill balance with GPS-guided iron, structural fill placement, storm and sewer mains, and import/export when the site demands it. We coordinate joint trench with Rocky Mountain Power and Dominion Energy directly so your dry-utility schedule doesn't slip.</p>
+
+        <h4>What Utah GCs Get When We're On The Job</h4>
+        <p>A foreman who reads plans before he reads email. Equipment that starts in February. A super who'll tell you the truth about schedule on a Tuesday morning, not Friday afternoon. And a turnover that doesn't leave a punch list for the concrete crew.</p>
+
+        <h4>Working in Utah: Geography &amp; Reg Notes</h4>
+        <p>Soils across Utah run the spectrum — alluvial fans on the bench, high water table near the lake, and rock once you climb east. We factor frost depth, UDOT permit lead times, and city-specific SWPPP requirements into the schedule from day one. No surprises at preconstruction.</p>
+
+        <h4 style="color: var(--text); margin-top: 20px">Frequently asked</h4>
+        <div class="faq">
+          <div class="q">Are you bonded and insured for public work?</div>
+          <div class="a">Yes — bonded and insured for public and private work across Utah, with current UDOT prequalification. We can send a current bonding letter same day.</div>
+        </div>
+        <div class="faq">
+          <div class="q">What's your typical mobilization lead time?</div>
+          <div class="a">Two to four weeks for most commercial pads, faster for repeat GC clients. Subdivision starts we plan with a longer runway because of utility coordination.</div>
+        </div>
+        <div class="faq">
+          <div class="q">Do you self-perform wet utilities or sub it out?</div>
+          <div class="a">Self-perform. Storm, sewer, and water mains are our crews and our iron. That's how we keep the schedule honest.</div>
+        </div>
+      </div>
+
+      <div class="approval-row">
+        <span class="pill pending">PENDING</span>
+        <span class="draft-id">draft_7cbab295d4c2</span>
+        <span style="color: var(--muted)">Drafted page · ready for review + publish</span>
+        <div class="actions">
+          <span class="btn edit">EDIT</span>
+          <span class="btn approve">PUBLISH</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CLOSING ═══════════════════════════════════════════════════════ -->
+    <div class="closing">
+      <h2>What this took</h2>
+      <p>One 3-sentence text from a foreman. Roughly 4 seconds of agent runtime per draft. About 60 seconds of office-manager review across the four artifacts above.</p>
+      <p>What used to require a part-time marketing coordinator now runs on a 15-minute-per-day approval routine.</p>
+      <p style="margin-top: 14px"><strong style="color: var(--text)">Multiply this by 30 field intakes a month, 50 review responses, 4 service-area pages, and 200 lead-form inquiries.</strong> That's the Marketing Operating System at scale.</p>
+    </div>
+
+    <div class="footer">
+      <div>Marketing Operating System · Sample Output · Captured from <code>demo.py --dry-run</code> · May 2026<br/>&copy; 2026&nbsp; JTC Communications &amp; Consulting, LLC and Coolnerd, LLC</div>
+      <div>
+        <a href="marketing-os-diagram.html">← Architecture</a>
+        &nbsp;·&nbsp;
+        <a href="landing.html">Back to proposal</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
