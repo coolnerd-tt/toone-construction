@@ -1,8 +1,8 @@
 """
-One-page executive summary — leave-behind for Jen.
-Designed to email or hand over before the full v4 proposal.
+One-page executive summary — leave-behind for prospects.
+Reads tenant.json so it stays in sync with the full proposal.
 """
-import os
+import os, json
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.platypus import (
@@ -24,10 +24,22 @@ GRAY_500 = HexColor('#8A8880')
 GRAY_700 = HexColor('#4A4845')
 
 W, H = letter
-BASE = "/Users/tylertoone/Desktop/Claude Work/inbox/excavating-site"
-JONES_LOGO  = os.path.join(BASE, "jones-assets/jones-logo.png")
-CALLUS_LOGO = os.path.join(BASE, "callus-logo-concepts/callus-logo-hz.png")
-OUTPUT      = os.path.join(BASE, "outputs/toone_one_pager.pdf")
+
+# ── TENANT CONFIG ─────────────────────────────────────────────────────────────
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+with open(os.path.join(BASE, 'tenant.json'), 'r', encoding='utf-8') as _f:
+    TENANT = json.load(_f)
+COMPANY = TENANT['company']
+PRICING = TENANT['pricing']
+COMPS   = TENANT['comp_set']
+META    = TENANT['proposal_meta']
+
+LOGO_PATH = os.path.join(BASE, 'assets/logo/toone-logo.png')
+OUTPUT    = os.path.join(BASE, 'outputs', f"{COMPANY['short_name'].lower().replace(' ', '_')}_one_pager.pdf")
+
+# Derived numbers
+BUILD_TOTAL    = sum(PRICING['build'].values())
+COMBINED_TOTAL = BUILD_TOTAL + PRICING['mos_build']
 
 def S(n, **kw): return ParagraphStyle(n, **kw)
 
@@ -38,7 +50,7 @@ title   = S('ti', fontName='Helvetica-Bold', fontSize=24, textColor=BLACK,
 subtitle= S('st', fontName='Helvetica-Oblique', fontSize=11, textColor=GRAY_500,
             leading=14, spaceAfter=12)
 h2      = S('h2', fontName='Helvetica-Bold', fontSize=11, textColor=ORANGE,
-            leading=14, spaceBefore=10, spaceAfter=4)
+            leading=14, spaceBefore=6, spaceAfter=3)
 body    = S('bd', fontName='Helvetica', fontSize=8.5, textColor=GRAY_700,
             leading=11, spaceAfter=4)
 body_b  = S('bdb',fontName='Helvetica-Bold', fontSize=8.5, textColor=BLACK,
@@ -55,7 +67,7 @@ price_l = S('pl', fontName='Helvetica-Bold', fontSize=7,  textColor=GRAY_500,
             leading=10, alignment=TA_CENTER)
 
 def bullet(t):
-    return Paragraph(f'<font color="#E8621A"><b>\u25AA</b></font>  {t}',
+    return Paragraph(f'<font color="#E8621A"><b>▪</b></font>  {t}',
                      S('bu', fontName='Helvetica', fontSize=8.5, textColor=GRAY_700,
                        leading=11, leftIndent=10, spaceAfter=2))
 
@@ -76,9 +88,9 @@ class Cover:
         c.saveState()
         c.setFillColor(BLACK)
         c.rect(0, H-50, W, 50, fill=1, stroke=0)
-        # Jones logo
+        # Tenant logo
         try:
-            img = ImageReader(JONES_LOGO)
+            img = ImageReader(LOGO_PATH)
             iw, ih = img.getSize()
             ratio = ih / iw
             disp_w = 90
@@ -89,7 +101,8 @@ class Cover:
             pass
         c.setFillColor(WHITE)
         c.setFont('Helvetica-Bold', 8)
-        c.drawRightString(W-36, H-30, 'EXECUTIVE SUMMARY  ·  MAY 2026')
+        c.drawRightString(W-36, H-30,
+            f"EXECUTIVE SUMMARY  ·  {META['month'].upper()} {META['year']}")
         # Footer
         c.setFillColor(GRAY_500)
         c.setFont('Helvetica', 7)
@@ -101,29 +114,32 @@ class Cover:
 def build():
     doc = SimpleDocTemplate(OUTPUT, pagesize=letter,
                             leftMargin=0.5*inch, rightMargin=0.5*inch,
-                            topMargin=0.85*inch, bottomMargin=0.55*inch,
-                            title='Toone Construction - Executive Summary')
+                            topMargin=0.78*inch, bottomMargin=0.45*inch,
+                            title=f"{COMPANY['name']} - Executive Summary")
     s = []
     s.append(Paragraph('PROPOSAL AT A GLANCE', eyebrow))
-    s.append(Paragraph('Toone Construction &mdash; 2026 Digital Engagement', title))
-    s.append(Paragraph('Two brands, two websites, and a Marketing Operating System built for the team to run.', subtitle))
+    s.append(Paragraph(f"{COMPANY['name']} &mdash; {META['year']} Digital Engagement", title))
+    s.append(Paragraph(
+        'A refreshed brand, a new website, and a Marketing Operating System built for the team to run.',
+        subtitle))
     s.append(HRFlowable(width='100%', thickness=0.5, color=GRAY_300, spaceAfter=10))
 
     # The opportunity (compressed)
     s.append(Paragraph('The opportunity', h2))
     s.append(Paragraph(
-        'Jones is an 35-year-old Utah commercial and civil general contractor with a digital presence that does not match '
-        'the work. Callus is the commercial and civil construction arm. The Utah comp set sits between '
-        '1,300 and 19,000 LinkedIn followers; Jones is at 331. One additional bid won per year pays for '
-        'this engagement 10\u2013100\u00D7 over.', body))
+        f"{COMPANY['short_name']} is a {COMPANY['heritage_years']}-year-old Utah commercial and civil "
+        f"general contractor with a digital presence that does not match the work. The Utah commercial-GC "
+        f"comp set sits between 1,300 and 19,000 LinkedIn followers; {COMPANY['short_name']} is at "
+        f"{COMPS['tenant_starting_followers']}. One additional mid-size commercial or public-works award "
+        f"per year (typical $1M–$15M+) pays for this engagement 20–200× over.", body))
 
     # Two-column: what we build / what they own
     left = [
         Paragraph('What we build (90 days)', h2),
-        bullet('<b>Two brand systems</b> &mdash; Jones refresh + Callus identity build.'),
-        bullet('<b>Two production websites</b> &mdash; tooneconstruction.com + .'),
+        bullet('<b>Brand refresh</b> &mdash; updated wordmark, palette, typography, and brand voice document.'),
+        bullet(f"<b>One production website</b> &mdash; new {COMPANY['domain']} with commercial and civil division pages, service-area pages, and project showcase."),
         bullet('<b>SEO foundation</b> &mdash; Google Business Profile setup, structured data, business listings, target service-area pages.'),
-        bullet('<b>Content engine</b> &mdash; 3-day Jones shoot + 1-day Callus shoot, 90-day post library, 2 hype videos.'),
+        bullet('<b>Content engine</b> &mdash; 3-day jobsite + project photo and video shoot, 90-day post library, 2 hype videos.'),
         bullet('<b>Marketing Operating System</b> &mdash; five agents, approval queue, brand-voice training, full support and monthly reporting.'),
     ]
     right = [
@@ -148,8 +164,8 @@ def build():
     # Marketing Operating System quick description
     s.append(Paragraph('The Marketing Operating System', h2))
     s.append(Paragraph(
-        'A foreman sends photos and a short note via text from a jobsite. Five specialized agents '
-        'draft brand-voice posts, replies, pages, and lead alerts. Office manager taps approve. '
+        'A superintendent sends photos and a short note via text from a jobsite. Five specialized agents '
+        f"draft {COMPANY['short_name']}-voice posts, replies, pages, and lead alerts. Office manager taps approve. "
         'Nothing publishes without a click. Replaces a marketing coordinator or agency retainer '
         'at a fraction of the cost, with a 15-minute-per-day routine and ~$200/mo in infrastructure.',
         body))
@@ -157,8 +173,9 @@ def build():
     # Sample-output callout
     cs = Table([[Paragraph(
         '<b>See it working: </b>'
-        'coolnerd-tt.github.io/toone-construction/outputs/marketing-os-sample.html '
-        '\u2014 real generated drafts, in Jones voice, from one foreman text-in.', white_b)]],
+        'coolnerd-tt.github.io/toone-construction/marketing-os/sample.html '
+        f"— real generated drafts, in {COMPANY['short_name']} voice, from one superintendent text-in.",
+        white_b)]],
         colWidths=[7.4*inch])
     cs.setStyle(TableStyle([
         ('BACKGROUND',(0,0),(-1,-1), CHARCOAL),
@@ -173,11 +190,11 @@ def build():
     # Pricing strip
     s.append(Paragraph('Investment', h2))
     pricing = Table([[
-        stat_card('$55,200', 'COMBINED BUILD &mdash; ONE TIME'),
-        stat_card('INCLUDED', 'CONCIERGE &mdash; MO 1\u20133', num_style=price_n_sm),
-        stat_card('$850', 'CO-PILOT &mdash; MO 4\u20136'),
-        stat_card('up to $350', 'SELF-SERVE &mdash; MO 7+', num_style=price_n_sm),
-        stat_card('~$200', 'INFRA &mdash; AT COST'),
+        stat_card(f'${COMBINED_TOTAL:,}', 'COMBINED BUILD &mdash; ONE TIME'),
+        stat_card('INCLUDED', 'CONCIERGE &mdash; MO 1–3', num_style=price_n_sm),
+        stat_card(f"${PRICING['mos_retainer']['copilot_monthly']}", 'CO-PILOT &mdash; MO 4–6'),
+        stat_card(f"up to ${PRICING['mos_retainer']['selfserve_monthly']}", 'SELF-SERVE &mdash; MO 7+', num_style=price_n_sm),
+        stat_card(f"~${PRICING['mos_retainer']['infra_estimate']}", 'INFRA &mdash; AT COST'),
     ]], colWidths=[1.5*inch]*5)
     pricing.setStyle(TableStyle([
         ('VALIGN',(0,0),(-1,-1),'TOP'),
@@ -187,16 +204,17 @@ def build():
     s.append(pricing)
     s.append(Spacer(1, 6))
     s.append(Paragraph(
-        'Build phase $37,500 + Marketing Operating System build $17,700. Self-serve billed at the '
-        'lesser of $350/mo or $150/hour. Tier-down with 30 days\u2019 notice after month 3.',
+        f"Build phase ${BUILD_TOTAL:,} + Marketing Operating System build ${PRICING['mos_build']:,}. "
+        f"Self-serve billed at the lesser of ${PRICING['mos_retainer']['selfserve_monthly']}/mo or "
+        f"${PRICING['mos_retainer']['selfserve_hourly']}/hour. Tier-down with 30 days’ notice after month 3.",
         small))
 
     # 90-day timeline strip
     s.append(Paragraph('90 days, three phases', h2))
     tl = Table([[
-        Paragraph('<b>WEEKS 1\u20133</b><br/>Discovery + Brand', body),
-        Paragraph('<b>WEEKS 4\u20139</b><br/>Design + Build + OS', body),
-        Paragraph('<b>WEEKS 10\u201312</b><br/>Launch + Activate', body),
+        Paragraph('<b>WEEKS 1–3</b><br/>Discovery + Brand', body),
+        Paragraph('<b>WEEKS 4–9</b><br/>Design + Build + OS', body),
+        Paragraph('<b>WEEKS 10–12</b><br/>Launch + Activate', body),
     ]], colWidths=[2.5*inch]*3)
     tl.setStyle(TableStyle([
         ('BACKGROUND',(0,0),(-1,-1), GRAY_50),
@@ -214,7 +232,7 @@ def build():
     s.append(Spacer(1, 8))
     s.append(Paragraph('Next step', h2))
     s.append(Paragraph(
-        'A 60-minute kickoff with leadership from both companies. On signature, the 90-day clock starts '
+        f"A 60-minute kickoff with {COMPANY['short_name']} leadership. On signature, the 90-day clock starts "
         'and the first jobsite shoot is scheduled inside week 2.', body_b))
 
     cb = Cover()
