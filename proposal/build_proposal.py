@@ -287,7 +287,7 @@ def comp_table(rows, center=False):
     hdr = [P(rows[0][0], c_hdr)] + [P(c, c_hdr_style) for c in rows[0][1:]]
     table_rows.append(hdr)
     for r in rows[1:]:
-        is_jones = 'Jones' in r[0]
+        is_jones = 'Toone' in r[0]
         name_style = c_pri if is_jones else c_body_b
         out = [P(r[0], name_style)]
         for v in r[1:]:
@@ -340,34 +340,29 @@ class Canv:
             c.setStrokeColor(HexColor('#15181B')); c.setLineWidth(0.4)
             for x in range(0,int(W)+1,40): c.line(x,0,x,H)
             for y in range(0,int(H)+1,40): c.line(0,y,W,y)
-            # Watermark logos
+            # Watermark logo (single brand, centered)
             try:
                 c.saveState()
-                c.setFillAlpha(0.07)
-                c.drawImage(ImageReader(JONES_LOGO),
-                            -1.0*inch, H/2 - 1.0*inch + 0.5*inch,
-                            width=4.6*inch, height=2.0*inch,
-                            mask='auto', preserveAspectRatio=True)
-                c.setFillAlpha(0.05)
-                c.drawImage(ImageReader(CALLUS_LOGO),
-                            W - 4.2*inch, H/2 - 0.8*inch,
-                            width=4.0*inch, height=2.0*inch,
+                c.setFillAlpha(0.06)
+                c.drawImage(ImageReader(LOGO_PATH),
+                            W/2 - 3.5*inch, H/2 - 1.0*inch,
+                            width=7.0*inch, height=2.0*inch,
                             mask='auto', preserveAspectRatio=True)
                 c.restoreState()
             except Exception:
                 pass
             c.setFont('Helvetica-Bold', 7)
             c.setFillColor(GRAY_700)
-            c.drawRightString(W-30, H-26, 'CONFIDENTIAL  |  PROPOSAL v5  |  APRIL 2026')
+            c.drawRightString(W-30, H-26, f"CONFIDENTIAL  |  PROPOSAL {META['version'].upper()}  |  {META['month'].upper()} {META['year']}")
         else:
             # Top header bar
             c.setFillColor(ORANGE); c.rect(0,H-3,W,3,fill=1,stroke=0)
             c.setFillColor(CHARCOAL); c.rect(0,H-32,W,29,fill=1,stroke=0)
             c.setFont('Helvetica-Bold', 7.5); c.setFillColor(WHITE)
-            c.drawString(30, H-21, 'JONES \u00D7 CALLUS')
+            c.drawString(30, H-21, 'TOONE CONSTRUCTION')
             c.setFillColor(ORANGE); c.drawString(30+82, H-21, '|')
             c.setFillColor(GRAY_300); c.setFont('Helvetica', 7.5)
-            c.drawString(30+90, H-21, 'Digital Proposal  \u00B7  v5  \u00B7  2026')
+            c.drawString(30+90, H-21, f"Digital Proposal  \u00B7  {META['version']}  \u00B7  {META['year']}")
             c.setFont('Helvetica-Bold', 7.5); c.setFillColor(ORANGE)
             c.drawRightString(W-30, H-21, f'{page}')
             # Footer bar
@@ -382,7 +377,7 @@ def build():
         OUTPUT, pagesize=letter,
         leftMargin=0.7*inch, rightMargin=0.7*inch,
         topMargin=0.7*inch,  bottomMargin=0.45*inch,
-        title='Jones \u00D7 Callus \u2014 Proposal v5',
+        title='Toone Construction \u2014 Proposal v5',
     )
     s = []
     cb = Canv()
@@ -393,53 +388,40 @@ def build():
     s.append(P('BRAND  \u00B7  WEB  \u00B7  SEO  \u00B7  SOCIAL', cover_label))
     s.append(sp(14))
 
-    # Real logo lockup
-    j_img = Image(JONES_LOGO,  width=2.4*inch, height=0.95*inch, kind='proportional')
-    c_img = Image(CALLUS_LOGO, width=2.0*inch, height=1.25*inch, kind='proportional')
-    logo_row = Table([[j_img, '', c_img]],
-                     colWidths=[2.7*inch, 0.3*inch, 2.3*inch])
+    # Single logo lockup
+    logo_img = Image(LOGO_PATH, width=3.6*inch, height=1.1*inch, kind='proportional')
+    logo_row = Table([[logo_img]], colWidths=[5.3*inch])
     logo_row.setStyle(TableStyle([
         ('VALIGN',(0,0),(-1,-1),'MIDDLE'),
         ('ALIGN',(0,0),(0,0),'LEFT'),
-        ('ALIGN',(2,0),(2,0),'LEFT'),
         ('LEFTPADDING',(0,0),(-1,-1),0),
         ('RIGHTPADDING',(0,0),(-1,-1),0),
         ('TOPPADDING',(0,0),(-1,-1),0),
         ('BOTTOMPADDING',(0,0),(-1,-1),0),
     ]))
     s.append(logo_row)
-    s.append(sp(20))
-
-    # Big title
-    s.append(P('TOONE CONSTRUCTION', cover_title2))
-    s.append(P('&amp;', cover_amp))
-    s.append(P('', cover_title))
     s.append(sp(24))
 
-    # Dual rule
-    rl = Table([['']], colWidths=[1.4*inch])
+    # Big title (single brand)
+    s.append(P(COMPANY['name'].upper(), cover_title2))
+    s.append(sp(18))
+
+    # Single accent rule
+    rl = Table([['']], colWidths=[1.8*inch])
     rl.setStyle(TableStyle([('LINEBELOW',(0,0),(-1,-1),2,ORANGE),
                             ('TOPPADDING',(0,0),(-1,-1),0),
                             ('BOTTOMPADDING',(0,0),(-1,-1),0)]))
-    rr = Table([['']], colWidths=[1.4*inch])
-    rr.setStyle(TableStyle([('LINEBELOW',(0,0),(-1,-1),2,SPARK),
-                            ('TOPPADDING',(0,0),(-1,-1),0),
-                            ('BOTTOMPADDING',(0,0),(-1,-1),0)]))
-    drule = Table([[rl, Spacer(0.15*inch,1), rr]],
-                  colWidths=[1.4*inch, 0.15*inch, 1.4*inch])
-    drule.setStyle(TableStyle([('LEFTPADDING',(0,0),(-1,-1),0),
-                                ('RIGHTPADDING',(0,0),(-1,-1),0)]))
-    s.append(drule)
+    s.append(rl)
     s.append(sp(24))
 
-    s.append(P('A two-brand digital proposal covering brand, web,', cover_meta))
-    s.append(P('search visibility, and social for two Utah contractors.', cover_meta))
+    s.append(P('A digital proposal covering brand, web,', cover_meta))
+    s.append(P('search visibility, and social for a Utah commercial and civil contractor.', cover_meta))
     s.append(sp(40))
 
     meta_row = Table([
         [P('PREPARED FOR', cover_label), P('PROPOSAL VERSION', cover_label), P('STATUS', cover_label)],
-        [P('Toone Construction Co.<br/>', cover_meta),
-         P('v5  \u00B7  May 2026', cover_meta),
+        [P(f"{COMPANY['name']}<br/>", cover_meta),
+         P(f"{META['version']}  \u00B7  {META['month']} {META['year']}", cover_meta),
          P('For Review', cover_meta)],
     ], colWidths=[2.4*inch, 2.2*inch, 1.7*inch])
     meta_row.setStyle(TableStyle([
@@ -494,22 +476,22 @@ def build():
     s.append(section_header(1, 'Executive Summary',
         kicker='What we are building, who it is for, and why it pays for itself.'))
     s.append(P(
-        'Toone Construction Co. is an 35-year-old Utah commercial and civil general contractor specializing in '
-        'commercial buildings, site work, and utilities, founded in 1990.  is its welding and '
-        'custom-fabrication arm. Both companies do excellent work; it is time their digital '
-        'presence reflects it.',
+        f"{COMPANY['name']} is a {COMPANY['heritage_years']}-year-old Utah commercial and civil general "
+        f"contractor specializing in tilt-up commercial buildings, public works, tenant improvement, "
+        f"and site work, founded in {COMPANY['founded']}. Toone does excellent work; it is time the "
+        "digital presence reflects it.",
         body_lead))
     s.append(P(
-        'This proposal lays out a coordinated plan for two distinct brands, two new '
-        'websites, and a 90-day rollout to make both companies easier to find, easier to '
-        'vet, and easier to hire than any regional competitor in their category.',
+        'This proposal lays out a coordinated plan for a refreshed brand, a new website, '
+        'and a 90-day rollout to make the company easier to find, easier to vet, and easier '
+        'to hire than any regional commercial-and-civil GC in its category.',
         body))
 
     s.append(P('What you get', h2))
-    s.append(bullet('<b>One coordinated brand system</b> covering both companies \u2014 distinct identities that '
+    s.append(bullet('<b>One coordinated brand system</b> covering the company \u2014 distinct identities that '
                     'still read as a family.'))
-    s.append(bullet('<b>Two production websites</b>: a refreshed tooneconstruction.com and a new .'))
-    s.append(bullet('<b>Local SEO + Google Business Profile (GBP) overhaul</b> to reposition both brands in the '
+    s.append(bullet('<b>One production website</b>: a new tooneconstruction.com with depth on services, service areas, and project showcase.'))
+    s.append(bullet('<b>Local SEO + Google Business Profile (GBP) overhaul</b> to reposition the brand in the '
                     'highest-leverage channel for this category.'))
     s.append(bullet('<b>Social media content engine:</b> LinkedIn-focused and sustainable post-launch.'))
     s.append(bullet('<b>90-day fixed-price build</b>, with options for ongoing support and maintenance.'))
@@ -518,43 +500,44 @@ def build():
     s.append(callout(
         'Why Act Now',
         'Construction investment is at a decade high, putting a spotlight on exactly the '
-        'specialized work Jones delivers. Now is the time to turn that market momentum into '
-        'wins. A polished, modern digital presence positions Jones as the clear, credible '
+        'specialized work Toone delivers. Now is the time to turn that market momentum into '
+        'wins. A polished, modern digital presence positions Toone as the clear, credible '
         'choice for owners, GCs, and engineers, elevates you in search results, and helps you '
         'recruit the field and office talent needed to scale. Just one additional mid-size '
-        'deep-foundation or shoring award can range from $500K\u2013$5M+; if improved '
-        'visibility and trust help Jones win even one new bid per year, this investment can '
-        'pay back 10\u00D7\u2013100\u00D7.',
+        'commercial tilt-up or public-works award can range from $1M\u2013$15M+; if improved '
+        'visibility and trust help Toone win even one new bid per year, this investment can '
+        'pay back 20\u00D7\u2013200\u00D7.',
         bg=CHARCOAL, accent=ORANGE, big_title=True))
 
     s.append(PageBreak())
 
     # ═══ 02 THE OPPORTUNITY (MARKET DATA) ════════════════════════════════════
     s.append(section_header(2, 'The Opportunity',
-        kicker='Where Jones stands against competitors.'))
+        kicker='Where Toone stands against Utah-market peers.'))
 
     s.append(P(
         'Before designing anything, we conducted market research. Two takeaways drive this proposal: '
         '<b>(1) LinkedIn is where Utah commercial and civil B2B happens</b>, and <b>(2) Google Business Profile '
-        'is critical to building local awareness of your business.</b> Both are areas of opportunity for Jones and Callus.',
+        'is critical to building local awareness of your business.</b> Both are areas of opportunity for Toone.',
         body_lead))
 
     s.append(P('LinkedIn Competitive Landscape', h2))
     s.append(P(
         'LinkedIn is where commercial GCs, owners\u2019 reps, developers, and project managers '
-        'vet contractors before short-listing. Jones can become a player within this space within '
+        'vet contractors before short-listing. Toone can become a player within this space within '
         '12 months.',
         body))
 
     s.append(comp_table([
         ['Company',                     'LinkedIn',  'Founded',  'Notes'],
-        ['BHI',                         '~19k',      '~2000',    'Excavation + construction'],
-        ['W.W. Clyde &amp; Co.',        '~14k',      '1926',     'Clyde Companies'],
-        ['Staker Parson',               '~6,100',    '1952',     'Materials + civil'],
-        ['Geneva Rock Products',        '~6,000',    '1954',     'Clyde Companies'],
-        ['Sunroc / Suncore',            '~6,000',    '1937',     'Clyde Companies'],
-        ['Hadco',                       '~1,300',    '1989',     'Excavation'],
-        ['Toone Construction Co.',        '331',       '1990',     'Excavation, Shoring, Utilities'],
+        ['Big-D Construction',          '~19k',      '1967',     'Commercial + civil GC'],
+        ['Layton Construction',         '~14.5k',    '1953',     'Commercial GC'],
+        ['Okland Construction',         '~8,200',    '1918',     'Commercial GC'],
+        ['Jacobsen Construction',       '~6,800',    '1922',     'Commercial GC'],
+        ['R&amp;O Construction',        '~4,100',    '1980',     'Commercial GC'],
+        ['Hogan &amp; Associates',      '~2,300',    '1990',     'Commercial GC'],
+        ['Westland Construction',       '~1,300',    '1996',     'Commercial GC'],
+        [f"{COMPANY['name']}",          str(COMPS['tenant_starting_followers']),  str(COMPANY['founded']), 'Commercial + Civil GC'],
     ], center=True))
     s.append(sp(4))
     s.append(P(
@@ -572,10 +555,10 @@ def build():
     s.append(P('Google Business Profile: Maximize SEO', h2))
     s.append(P(
         'Google Maps is where most buyers build their short list. When someone searches for any of '
-        'your services (excavating, deep foundation, custom fabrication, welding), Google shows three '
+        'your services (commercial GC, tilt-up, site work, public works), Google shows three '
         'local businesses at the top of the page, with star ratings, reviews, photos, and a '
         'tap-to-call button. That box appears before any regular search results. Miss that spot and '
-        'Jones and Callus are invisible at the moment a buyer is ready to act. A strong Google Business Profile '
+        'Toone is invisible at the moment a buyer is ready to act. A strong Google Business Profile '
         'and an active review program help build instant trust, drive inbound calls, and route '
         'qualified traffic to the new website.',
         body))
@@ -593,62 +576,38 @@ def build():
                     leading=11, alignment=TA_LEFT)
 
     gbp_rows = [
-        # Super-header: groups three sections
-        [P('', gbp_hdr_grp),
-         P('Where you want to be', gbp_hdr_grp), '',
-         P('Average company', gbp_hdr_grp),
-         P('Where you are today', gbp_hdr_grp), ''],
-        # Sub-header: brand-level labels under each group (Average company cell
-        # is empty here because it merges with the row above via SPAN)
-        [P('Benchmark', gbp_hdr_sub),
-         P('Jones', gbp_hdr_sub),
-         P('Callus', gbp_hdr_sub),
-         '',
-         P('Jones', gbp_hdr_sub),
-         P('Callus', gbp_hdr_sub)],
-        # Data rows
+        # Single-brand header
+        [P('Benchmark',                 gbp_hdr_grp),
+         P('Where you want to be',      gbp_hdr_grp),
+         P('Average company',           gbp_hdr_grp),
+         P('Where you are today',       gbp_hdr_grp)],
+        # Data rows -- single tenant column
         [P('Google review count',              gbp_label),
-         P('100+',    gbp_data), P('50+',    gbp_data), P('20\u201380',   gbp_data),
-         P('18',      gbp_data), P('1',      gbp_data)],
+         P('100+',    gbp_data), P('20–80',   gbp_data), P(str(COMPS['tenant_starting_reviews']), gbp_data)],
         [P('Star rating (jobsite category)',   gbp_label),
-         P('4.5\u20134.7', gbp_data), P('4.5\u20134.7', gbp_data), P('4.0\u20134.4', gbp_data),
-         P('4.4',     gbp_data), P('5.0',    gbp_data)],
+         P('4.5–4.7', gbp_data), P('4.0–4.4', gbp_data), P(str(COMPS['tenant_starting_rating']),  gbp_data)],
         [P('GBP photos (recent, geo-tagged)',  gbp_label),
-         P('40+',     gbp_data), P('30+',    gbp_data), P('10\u201320',   gbp_data),
-         P('2',       gbp_data), P('6',      gbp_data)],
+         P('40+',     gbp_data), P('10–20',   gbp_data), P(str(COMPS['tenant_starting_photos']),  gbp_data)],
         [P('Owner replies to reviews',         gbp_label),
-         P('100%',    gbp_data), P('100%',   gbp_data), P('~50%',    gbp_data),
-         P('0%',      gbp_data), P('0%',     gbp_data)],
+         P('100%',    gbp_data), P('~50%',    gbp_data), P(f"{COMPS['tenant_starting_reply_rate']}%", gbp_data)],
         [P('Service area pages (linked from GBP)', gbp_label),
-         P('8\u201312',    gbp_data), P('4\u20136',    gbp_data), P('3\u20136',     gbp_data),
-         P('0',       gbp_data), P('0',      gbp_data)],
+         P('8–12',    gbp_data), P('3–6',     gbp_data), P(str(COMPS['tenant_starting_sa_pages']), gbp_data)],
     ]
-    # Column widths: benchmark column wider, 5 value columns equal
-    gbp_widths = [1.95*inch] + [(CONTENT_W - 1.95*inch) / 5] * 5
-    gbp_t = Table(gbp_rows, colWidths=gbp_widths, repeatRows=2)
+    # Column widths: benchmark column wider, 3 value columns equal
+    gbp_widths = [1.95*inch] + [(CONTENT_W - 1.95*inch) / 3] * 3
+    gbp_t = Table(gbp_rows, colWidths=gbp_widths, repeatRows=1)
     gbp_t.setStyle(TableStyle([
-        # Backgrounds
         ('BACKGROUND',(0,0),(-1,0), CHARCOAL),
-        ('BACKGROUND',(0,1),(-1,1), HexColor('#2A2F33')),
-        ('ROWBACKGROUNDS',(0,2),(-1,-1), [WHITE, GRAY_50]),
-        # Super-header spans
-        ('SPAN',(1,0),(2,0)),  # 'Where you want to be' over Jones + Callus
-        ('SPAN',(4,0),(5,0)),  # 'Where you are today' over Jones + Callus
-        ('SPAN',(3,0),(3,1)),  # 'Average company' merges vertically across both header rows
-        # Make sure the merged Average company cell has the dark super-header background
-        ('BACKGROUND',(3,0),(3,1), CHARCOAL),
-        # Padding
-        ('TOPPADDING',(0,0),(-1,-1),6),
-        ('BOTTOMPADDING',(0,0),(-1,-1),6),
+        ('ROWBACKGROUNDS',(0,1),(-1,-1), [WHITE, GRAY_50]),
+        ('TOPPADDING',(0,0),(-1,-1),7),
+        ('BOTTOMPADDING',(0,0),(-1,-1),7),
         ('LEFTPADDING',(0,0),(-1,-1),9),
         ('RIGHTPADDING',(0,0),(-1,-1),9),
         ('VALIGN',(0,0),(-1,-1),'MIDDLE'),
-        # Subtle separators
-        ('LINEBELOW',(0,1),(-1,1), 0.4, GRAY_500),
-        ('LINEBELOW',(0,2),(-1,-1), 0.4, GRAY_300),
-        # Vertical separators between group sections (after Callus, after Typical)
+        ('LINEBELOW',(0,0),(-1,0), 0.4, GRAY_500),
+        ('LINEBELOW',(0,1),(-1,-1), 0.4, GRAY_300),
+        ('LINEAFTER',(1,0),(1,-1), 0.4, GRAY_300),
         ('LINEAFTER',(2,0),(2,-1), 0.4, GRAY_300),
-        ('LINEAFTER',(3,0),(3,-1), 0.4, GRAY_300),
     ]))
     s.append(gbp_t)
     s.append(sp(4))
@@ -662,43 +621,30 @@ def build():
 
     # ═══ 03 BRAND & WEB STRATEGY ═════════════════════════════════════════════
     s.append(section_header(3, 'Brand &amp; Web Strategy',
-        kicker='Two brands, two sites, one coordinated team.'))
+        kicker='One brand, one site, one operating system.'))
 
     s.append(P(
-        'Jones and Callus are different businesses serving different buyers. They should look '
-        'related \u2014 same family, same standards \u2014 without sharing a brand.',
+        'Toone Construction serves two related but distinct buyer audiences \u2014 commercial '
+        'and civil. The brand reads as one capable firm; each division gets its own dedicated '
+        'section on the site so buyers find exactly the work they need.',
         body_lead))
 
-    s.append(P('Toone Construction Co. \u2014 Brand refresh', h3))
+    s.append(P('Brand refresh — single coordinated identity', h3))
     s.append(P(
-        'Jones already has equity. The J-mark is the most recognizable element you have, '
-        'and 80 years of commercial buildings, site work, and utilities work back it up. The refresh sharpens the typography, '
-        'modernizes the palette, and tightens the visual system while keeping core elements people know.',
+        f"{COMPANY['short_name']} has equity in the local market — {COMPANY['heritage_years']} years and a steady book of public-works and "
+        "commercial buildings, site work, and utilities. The current wordmark is serviceable but reads dated. "
+        "The refresh sharpens the typography, modernizes the palette, and tightens the visual system "
+        "while keeping the equity already built.",
         body))
-    s.append(bullet('Logo: keep the original mark; refresh the original and add a horizontal version '
-                    'for web/social.'))
-    s.append(bullet('Tagline: &quot;Built for the Tough Jobs.&quot;'))
-    s.append(bullet('Palette: charcoal and orange as the core colors, with amber accents on highlights '
-                    'and a soft off-white background for sections with a lot of text.'))
-    s.append(bullet('Typography: bold, condensed headlines paired with clean, readable body text. '
-                    'Industrial feel that loads fast on any device.'))
-    s.append(bullet('Photography: add on-site photos and video from active jobs.'))
+    s.append(bullet('Logo: refreshed wordmark with a horizontal lockup for web/social and a stacked variant for forms and signage.'))
+    s.append(bullet('Tagline: <b>&quot;Commercial and civil. Built on the work.&quot;</b>'))
+    s.append(bullet('Palette: deep-steel blue and construction orange as the core colors, with neutral grays for body and a warm off-white for text-heavy sections.'))
+    s.append(bullet('Typography: bold, condensed headlines paired with clean, readable body text. Industrial without feeling generic.'))
+    s.append(bullet('Photography system: on-site photos and video from active commercial and civil jobs, refreshed quarterly.'))
 
-    s.append(P(' \u2014 Brand build (Spark direction)', h3_spark))
+    s.append(P('Web build — the site', h2)) 
     s.append(P(
-        'Callus has a solid starting point. We refined it into the Spark direction: '
-        'an industrial badge feel, dark steel tones, a glove-and-spark mark, and rugged headline '
-        'type. The brand speaks directly to the people who hire welders, including GCs, plant '
-        'managers, and foremen working by the hour or by the project.',
-        body))
-    s.append(bullet('Logo: glove + spark mark, with horizontal and vertical options.'))
-    s.append(bullet('Tagline: &quot;Built tough. Welded right.&quot;'))
-    s.append(bullet('Family link: Callus carries a &quot;proud part of the Toone Construction family&quot; line in the banner, '
-                    'about, and footer, borrowing trust without diluting the new brand.'))
-
-    s.append(P('Web build \u2014 both sites', h2))
-    s.append(P(
-        'Both sites will use modern technology so they are fast, easy to update, and search-friendly. '
+        'The site uses modern technology so it loads fast, updates easily, and ranks well — and is built around how Toone’s buyers actually shop: by service and by service area.'
         'Each site is built for the company\u2019s needs.',
         body))
 
@@ -708,52 +654,37 @@ def build():
     s.append(bullet('<b>Built for the phone.</b> Most customers, GCs, and crew look at the site from the '
                     'jobsite or the truck, not a desktop. Pages load fast and read cleanly on mobile, '
                     'where the decision to call actually happens.'))
-    s.append(bullet('<b>Found by Google.</b> Every page is structured so search engines recognize Jones '
-                    'and Callus, their services, and their projects, putting you in front of buyers '
-                    'searching for excavation work right now.'))
+    s.append(bullet('<b>Found by Google.</b> Every page is structured so search engines recognize '
+                    'Toone, its services, and its projects, putting it in front of buyers '
+                    'searching for commercial or civil construction work right now.'))
 
     s.append(PageBreak())
     s.append(P('Page set', h3))
-    s.append(two_col([
-        P('<b>tooneconstruction.com</b>', body),
-        bullet('Home page content and menu'),
-        bullet('Company services and sub pages'),
-        bullet('Projects (case studies, filterable)'),
-        bullet('About (history, leadership, etc.)'),
-        bullet('Careers'),
-        bullet('Service areas'),
-        bullet('Contact / Get a quote'),
-    ], [
-        P('<b></b>', body),
-        bullet('Home page content and menu'),
-        bullet('Company services and sub pages'),
-        bullet('Shop (capabilities, equipment, certifications)'),
-        bullet('Projects (gallery)'),
-        bullet('About'),
-        bullet('Careers'),
-        bullet('Service areas'),
-        bullet('Contact / Get a Quote'),
-    ]))
+    s.append(P(f'<b>{COMPANY["domain"]}</b>', body))
+    s.append(bullet('Home — hero, capability snapshot, latest projects, lead form'))
+    s.append(bullet('Commercial Construction — services overview + sub-pages (tilt-up, public works, TI, healthcare, education)'))
+    s.append(bullet('Civil Construction — services overview + sub-pages (site prep, utilities, roadwork, storm)'))
+    s.append(bullet('Projects — filterable case-study gallery'))
+    s.append(bullet('Service Areas — geo-targeted landing pages for each Wasatch Front city'))
+    s.append(bullet('About — history (est. 1990), leadership, safety record, certifications'))
+    s.append(bullet('Careers — open roles, culture, application form'))
+    s.append(bullet('Contact / Get a Quote — RFQ form, direct dispatch line, jobsite address request'))
     s.append(PageBreak())
 
     # ═══ 04 SEO & LOCAL ═════════════════════════════════════════════════════
     s.append(section_header(4, 'SEO &amp; Local Search',
-        kicker='The highest-leverage channel for both brands.', accent=TEAL))
+        kicker='The highest-leverage channel for the brand.', accent=TEAL))
 
     s.append(P(
-        'For excavating and fabrication, the search journey is local-first: Someone types a '
-        'job-site need into Google, sees a map of local providers, and calls one of the top '
-        'three. The website matters \u2014 but only after they have found you on Google Maps.',
+        'For a commercial and civil GC, the search journey is local-first: a developer, school district, or municipal project manager types a need into Google, sees a map of local providers, and calls one of the top three. The website matters \u2014 but only after they have found you on Google Maps.',
         body_lead))
 
     s.append(P('Google Business Profile (GBP)', h3_teal))
-    s.append(bullet('Claim and verify both GBPs (Jones is partially claimed; Callus needs to be added).'))
-    s.append(bullet('Categorize your primary and secondary services (Excavating Contractor, Earthworks, '
-                    'General Contractor, Construction Services for Jones; Welder, Welding Supply, '
-                    'Custom Fabricator for Callus).'))
+    s.append(bullet('Claim and verify the Toone Construction GBP (partially claimed; needs primary category set and photos added).'))
+    s.append(bullet('Categorize primary and secondary services (General Contractor, Commercial Building Contractor, Construction Company, Civil Engineer, Excavating Contractor).'))
     s.append(bullet('List and claim all the service areas where you do business.'))
     s.append(bullet('Ensure hours, contacts, attributes, accessibility, payment methods, and languages are '
-                    'consistent across both businesses.'))
+                    'consistent across all listings.'))
     s.append(bullet('Add 30+ recent geo-tagged jobsite photos in batch, then continue adding 4\u20136 per month '
                     'consistently.'))
     s.append(bullet('Create a review program with a text template to send to clients after every completed '
@@ -772,64 +703,44 @@ def build():
                     'Utah, Yelp, BuildZoom, Procore, and others).'))
 
     s.append(P('Target keywords', h3_teal))
-    s.append(two_col([
-        P('<b>Toone Construction</b>', body),
-        bullet('excavating contractor utah'),
-        bullet('deep foundation salt lake city'),
-        bullet('shoring contractor utah'),
-        bullet('site work contractor west jordan'),
-        bullet('drilling contractor wasatch front'),
-        bullet('utility excavation utah county'),
-        bullet('commercial excavation salt lake'),
-    ], [
-        P('<b></b>', body),
-        bullet('mobile welder west jordan'),
-        bullet('welding contractor utah'),
-        bullet('custom fabrication salt lake'),
-        bullet('mig welding wasatch front'),
-        bullet('line boring utah'),
-        bullet('industrial welding salt lake'),
-        bullet('emergency welding utah'),
-    ]))
+    s.append(P(f'<b>{COMPANY["short_name"]} — Utah commercial + civil GC</b>', body))
+    s.append(bullet('commercial general contractor utah'))
+    s.append(bullet('tilt-up construction salt lake city'))
+    s.append(bullet('school construction utah'))
+    s.append(bullet('public works contractor wasatch front'))
+    s.append(bullet('tenant improvement contractor salt lake'))
+    s.append(bullet('civil contractor utah county'))
+    s.append(bullet('site preparation utah'))
+    s.append(bullet('underground utilities salt lake'))
 
     s.append(PageBreak())
 
     # ═══ 05 SOCIAL & CONTENT ═════════════════════════════════════════════════
     s.append(section_header(5, 'Social &amp; Content',
-        kicker='Where the competition already lives, and where Jones and Callus can catch up fastest.'))
+        kicker='Where the competition already lives, and where Toone can catch up fastest.'))
 
     s.append(P('LinkedIn \u2014 the priority channel', h3))
-    s.append(bullet('We will refresh the Jones LinkedIn page (banner, about copy, and post cadence) '
-                    'and create a Callus LinkedIn company page to launch with the website.'))
-    s.append(bullet('Posting cadence: <b>3 posts/week per brand</b> mixing project milestones, behind-the-scenes '
+    s.append(bullet('We will refresh the Toone Construction LinkedIn page (banner, about copy, and post cadence) '
+                    'and bring the Toone Construction LinkedIn page in line with peers (Big-D, Layton, Okland, Hogan).'))
+    s.append(bullet('Posting cadence: <b>3 posts/week</b> mixing project milestones, behind-the-scenes '
                     'shop/yard content, hiring posts, and short ownership notes.'))
     s.append(bullet('Employee advocacy: foremen, PMs, and ownership reshare from personal accounts to boost '
                     'social engagement and amplify reach.'))
     s.append(bullet('Each month, send 50\u2013100 personalized connection requests on LinkedIn to potential clients.'))
 
     s.append(P('Content pillars', h3))
-    s.append(two_col([
-        P('<b>Jones</b>', body),
-        bullet('Jobsite milestones'),
-        bullet('Video and photo action shots'),
-        bullet('Equipment in action (drone, video)'),
-        bullet('Crew spotlights / safety wins'),
-        bullet('Project case studies'),
-        bullet('Industry commentary from leadership'),
-        bullet('Create a hype video'),
-    ], [
-        P('<b>Callus</b>', body),
-        bullet('Welding before/after'),
-        bullet('Time-lapse videos'),
-        bullet('Same-day service moments'),
-        bullet('Crew skill spotlights'),
-        bullet('Quick how-it-was-done write-ups'),
-        bullet('Create a hype video'),
-    ]))
+    s.append(P(f'<b>{COMPANY["short_name"]}</b>', body))
+    s.append(bullet('Jobsite milestones (slab pours, structural milestones, ribbon-cuttings)'))
+    s.append(bullet('Action photo and video — equipment in motion, crews on site, drone progression'))
+    s.append(bullet('Project case studies (public works, commercial, civil — one per month)'))
+    s.append(bullet('Crew spotlights and safety wins'))
+    s.append(bullet('Behind-the-scenes from estimating, pre-con, and the field office'))
+    s.append(bullet('Industry commentary from leadership (market conditions, AGC engagement, public works trends)'))
+    s.append(bullet('Hype reel — a 60-second highlight video per quarter for LinkedIn + the website hero'))
 
     s.append(P('Instagram + Facebook', h3))
     s.append(bullet('<b>Instagram</b> is where the visual story lives. Jobsite photos and short videos '
-                    'put Jones and Callus in front of GCs, project managers, field workers, and recruits '
+                    'put Toone in front of GCs, project managers, field workers, and recruits '
                     'who respond to seeing the work, not just reading about it.'))
     s.append(bullet('<b>Facebook</b> reaches Utah professionals, local community pages, and crew families '
                     'who share what they see. Everything cross-posts from Instagram automatically, so '
@@ -844,7 +755,7 @@ def build():
     s.append(P('Content', h3))
     s.append(bullet('<b>We provide professional photography and videography.</b> Drone, jobsite, and shop '
                     'coverage captured during 4 day shoots that will produce 8\u201310 weeks of posts across '
-                    'both brands.'))
+                    'the brand.'))
     s.append(bullet('<b>We train your team so they know how to capture content easily.</b> Someone in '
                     'your office can then take those photos and video clips and post them manually to '
                     'your social media platforms.'))
@@ -858,7 +769,7 @@ def build():
     s.append(P(
         'Most marketing engagements end one of two ways. The agency keeps billing forever, or '
         'the client tries to take it in-house and the work quietly stops. Neither outcome is good '
-        'for Jones or Callus. This chapter describes the third option.',
+        'for Toone. This chapter describes the third option.',
         body_lead))
 
     s.append(P(
@@ -889,12 +800,12 @@ def build():
         'A foreman or PM sends photos and a short note via text message ("Finished the Lehi sewer '
         'tie-in, biggest job of the year, 14 hours"). The agent generates a LinkedIn post, '
         'Google Business Profile post, Instagram caption, blog snippet, and internal newsletter '
-        'blurb, all in Jones or Callus voice. Office manager taps approve.',
+        'blurb, all in Toone voice. Office manager taps approve.',
         body))
 
     s.append(P('Reputation Agent', h3))
     s.append(P(
-        'This agent watches your Google and Facebook reviews on both brands. When a new review '
+        'This agent watches your Google and Facebook reviews on the brand. When a new review '
         'comes in, it drafts a reply in your brand voice and adjusts the tone to match the rating. '
         'A 5-star review gets a friendly thank-you. A 1- or 2-star review gets a measured response '
         'with a private offer to resolve the issue. The office manager approves and the reply posts.',
@@ -910,7 +821,7 @@ def build():
 
     s.append(P('Lead Triage Agent', h3))
     s.append(P(
-        'This agent classifies inbound inquiries into excavation, fabrication, spam, and general '
+        'This agent classifies inbound inquiries into RFP, RFQ, design-build inquiry, spam, and general '
         'categories. It extracts contact info and potential project info, then drafts an internal '
         'message alert and a 3-line auto-reply. Hot leads are routed directly to you in under a '
         'minute.',
@@ -1149,19 +1060,15 @@ def build():
         ]))
         return block
 
-    jones_block = cm_brand_block('JONES', cm_brand_j, ORANGE, [
-        ('LinkedIn',  '600', '1,100'),
-        ('Instagram', '600', '750'),
-        ('Facebook',  '215', '300'),
-    ])
-    callus_block = cm_brand_block('CALLUS', cm_brand_c, SPARK, [
-        ('LinkedIn',  '400', '550'),
-        ('Instagram', '190', '350'),
-        ('Facebook',  '100', '200'),
+    toone_block = cm_brand_block(COMPANY['short_name'].upper(), cm_brand_j, ORANGE, [
+        ('LinkedIn',  '750',   '1,400'),
+        ('Instagram', '420',   '650'),
+        ('Facebook',  '310',   '475'),
+        ('GBP reviews', '20',  '60'),
     ])
 
-    cards_row = Table([[jones_block, '', callus_block]],
-                      colWidths=[2.95*inch, 0.2*inch, 2.95*inch])
+    cards_row = Table([[toone_block]],
+                      colWidths=[CONTENT_W - 32])
     cards_row.setStyle(TableStyle([
         ('VALIGN',(0,0),(-1,-1),'TOP'),
         ('LEFTPADDING',(0,0),(-1,-1),0),
@@ -1172,7 +1079,7 @@ def build():
 
     foot_strip = Table([
         [P('AVERAGE LIFT WITH MARKETING OS', cm_foot_lbl)],
-        [P('1.6× more followers across both brands', cm_foot_val)],
+        [P('1.8× more followers across the brand', cm_foot_val)],
     ], colWidths=[CONTENT_W - 32])
     foot_strip.setStyle(TableStyle([
         ('VALIGN',(0,0),(-1,-1),'MIDDLE'),
@@ -1212,33 +1119,25 @@ def build():
 
     s.append(P('Build phase: fixed price', h2))
 
-    s.append(price_row('Brand system: Jones',
-                       '$3,500',
-                       'Logo refresh, palette, typography, usage guide.'))
-    s.append(price_row('Brand system: Callus',
-                       '$4,500',
-                       'New brand identity from the ground up: logo system, palette, tone of voice, and brand guidelines.'))
-    s.append(price_row('Website: tooneconstruction.com',
-                       '$8,500',
-                       '7 templated pages plus service-area pages.'))
-    s.append(price_row('Website: ',
-                       '$7,500',
-                       '7 templated pages plus shop section.'))
-    s.append(price_row('SEO foundation (both)',
-                       '$3,500',
+    s.append(price_row('Brand refresh',
+                       f"${PRICING['build']['brand_refresh']:,}",
+                       'Logo refresh, palette, typography, usage guide, and brand voice document.'))
+    s.append(price_row(f"Website: {COMPANY['domain']}",
+                       f"${PRICING['build']['website']:,}",
+                       'Deep single-brand site: home, commercial division, civil division, projects, service-area pages, about, careers, contact.'))
+    s.append(price_row('SEO foundation',
+                       f"${PRICING['build']['seo_foundation']:,}",
                        'Google Business Profile setup, structured data, business listings, technical audit, on-page work.'))
     s.append(price_row('Content shoot + initial library',
-                       '$8,000',
-                       '3-day shoot at Jones sites and 1-day shoot at Callus shop. Photo and video, plus a 90-day post library.'))
-    s.append(price_row('Hype video: Jones',
-                       '$1,000',
-                       'Branded hype video edited from shoot footage. ~10 hours of editing.'))
-    s.append(price_row('Hype video: Callus',
-                       '$1,000',
-                       'Branded hype video edited from shoot footage. ~10 hours of editing.'))
+                       f"${PRICING['build']['photography']:,}",
+                       '3-day photo and video shoot at active jobsites, plus a 90-day post library.'))
+    s.append(price_row('Hype video + content engine',
+                       f"${PRICING['build']['content_engine']:,}",
+                       'Two 60-second hype videos edited from shoot footage, plus the editorial calendar and brand-voice training that feed the Marketing Operating System.'))
+    build_total = sum(PRICING['build'].values())
     s.append(price_row('Build phase total',
-                       '$37,500',
-                       'One-time. Static buildout: brand, websites, SEO foundation, and content library.',
+                       f"${build_total:,}",
+                       'One-time. Static buildout: brand, website, SEO foundation, and content library.',
                        highlight=True))
 
     s.append(sp(8))
@@ -1250,11 +1149,12 @@ def build():
         body))
 
     s.append(price_row('Marketing Operating System build',
-                       '$17,700',
+                       f"${PRICING['mos_build']:,}",
                        'Five agents, central scheduler, approval queue, brand-voice training, and integrations. Full support for the Marketing Operating System and a monthly report.'))
+    combined = build_total + PRICING['mos_build']
     s.append(price_row('Combined build total',
-                       '$55,200',
-                       'Build phase ($37,500) plus Marketing Operating System build ($17,700). 40% on signature, 30% at design approval, 30% at launch.',
+                       f"${combined:,}",
+                       f"Build phase (${build_total:,}) plus Marketing Operating System build (${PRICING['mos_build']:,}). 40% on signature, 30% at design approval, 30% at launch.",
                        highlight=True))
 
     s.append(P('Engagement at a glance', h2))
@@ -1286,7 +1186,7 @@ def build():
         P('SELF-SERVE', eg_phase),
     ]
     costs = [
-        [P('$55,200', eg_cost), P('one-time', eg_sub)],
+        [P(f"${combined:,}", eg_cost), P('one-time', eg_sub)],
         [P('Included', eg_cost), P('in build', eg_sub)],
         [P('$850 / mo', eg_cost), P('infra included', eg_sub)],
         [P('\u2264 $350 / mo', eg_cost), P('+ ~$200 infra', eg_sub)],
@@ -1365,20 +1265,20 @@ def build():
 
     s.append(phase_card('01', 'Discovery + Brand', 'Weeks 1\u20133',
         ['Stakeholder interviews; site audit',
-         'Jones brand refresh; Callus brand build',
+         'Toone Construction brand refresh',
          'Photography and videography for 4 days at active jobsites + shop',
          'Google Business Profile setup and business listing pass',
          'You approve the brand work before we start the website']))
     s.append(sp(6))
     s.append(phase_card('02', 'Design + Build', 'Weeks 4\u20139',
-        ['Both sites designed and built for each company’s needs',
+        ['The site designed and built for each company’s needs',
          'Content drafted with leadership input',
          'You approve the design and content before we launch']))
     s.append(sp(6))
     s.append(phase_card('03', 'Launch + Activate', 'Weeks 10\u201312',
         ['Soft launch \u2192 final QA \u2192 hard launch',
          'LinkedIn relaunch with refreshed pages and content',
-         'Review ask program activated for both brands',
+         'Review ask program activated for the brand',
          'Marketing Operating System goes live. Concierge phase begins (included in build).']))
 
 
@@ -1398,7 +1298,7 @@ def build():
 
     s.append(P('Approvals required', h3))
     s.append(bullet('Sign-off on this proposal (this PDF and a brief Master Service Agreement).'))
-    s.append(bullet('Decision on Callus concept. The Spark direction is the recommended path '
+    s.append(bullet('Final brand direction sign-off (palette, typography, photography style). '
                     'and what the website concept reflects today.'))
     s.append(bullet('Designated point of contact at each company for weekly check-ins.'))
 
@@ -1410,7 +1310,7 @@ def build():
 
     s.append(P('Kickoff', h3))
     s.append(P(
-        'On signature we hold a 60-minute kickoff with leadership from both companies, agree on the '
+        'On signature we hold a 60-minute kickoff with leadership from the company, agree on the '
         'first jobsite shoot date, and start the brand work the same week. The 90-day clock starts '
         'on signature.',
         body))
@@ -1418,7 +1318,7 @@ def build():
     s.append(sp(20))
     s.append(callout(
         'A note on the work',
-        'Jones has built something real over four generations. Callus is a chance to build '
+        'Toone has built something real over three decades. This engagement is a chance to '
         'something new on top of that foundation. The deliverables in this proposal exist to '
         'serve that, not the other way around. If anything in here does not fit how you want '
         'to be in the world, tell us and we will adjust before we start. We work for you.',
