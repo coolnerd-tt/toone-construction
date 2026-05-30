@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Toone Construction Co. — Digital Engagement Proposal</title>
+<meta name="description" content="A 90-day digital engagement for a Utah commercial &amp; civil general contractor: brand, website, local SEO, and a Marketing Operating System the team runs." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --steel:   #1F3A5F;
+    --steel-d: #16293F;
+    --orange:  #D97E2A;
+    --orange-d:#B8631A;
+    --dark:    #1A1D21;
+    --ink:     #0C0E10;
+    --light:   #F4F2EE;
+    --gray-100:#E8E6E1;
+    --gray-300:#C9C6BF;
+    --gray-500:#8A8880;
+    --gray-700:#4A4845;
+    --border:  #2A2F36;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── NAV ──────────────────────────────────────────── */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(26,29,33,0.96);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 32px;
+  }
+  .nav .brand {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 20px; letter-spacing: 0.04em;
+    color: var(--light); text-transform: uppercase;
+  }
+  .nav .brand span { color: var(--orange); }
+  .nav .links { display: flex; gap: 26px; }
+  .nav .links a {
+    color: var(--gray-300); font-size: 13px; font-weight: 500;
+    letter-spacing: 0.02em; transition: color 0.15s;
+  }
+  .nav .links a:hover { color: var(--orange); }
+  @media (max-width: 640px) { .nav .links { display: none; } }
+
+  /* ── HERO ─────────────────────────────────────────── */
+  .hero {
+    background:
+      linear-gradient(180deg, rgba(12,14,16,0.78), rgba(22,41,63,0.92)),
+      repeating-linear-gradient(45deg, #1c2733 0 2px, transparent 2px 22px);
+    color: var(--light);
+    padding: 96px 32px 88px;
+    text-align: center;
+    border-bottom: 4px solid var(--orange);
+  }
+  .hero .eyebrow {
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--orange); font-weight: 700; margin-bottom: 22px;
+  }
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; text-transform: uppercase;
+    font-size: clamp(44px, 8vw, 96px);
+    line-height: 0.94; letter-spacing: 0.005em;
+    margin-bottom: 8px;
+  }
+  .hero h1 .co { display: block; color: var(--orange); }
+  .hero .sub {
+    max-width: 680px; margin: 26px auto 0;
+    font-size: 18px; color: var(--gray-300); font-weight: 300;
+  }
+  .hero .meta {
+    margin-top: 34px; display: flex; gap: 30px; justify-content: center;
+    flex-wrap: wrap; font-size: 13px; color: var(--gray-500);
+    letter-spacing: 0.04em;
+  }
+  .hero .meta b { color: var(--light); font-weight: 600; }
+
+  /* ── DEMO BANNER ──────────────────────────────────── */
+  .demo-banner {
+    background: var(--orange);
+    color: var(--ink);
+    text-align: center;
+    padding: 11px 24px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.01em;
+  }
+
+  /* ── SECTION SCAFFOLD ─────────────────────────────── */
+  .section { max-width: 1080px; margin: 0 auto; padding: 72px 32px; }
+  .section-label {
+    font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--orange); font-weight: 700; margin-bottom: 12px;
+  }
+  .section h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; text-transform: uppercase;
+    font-size: clamp(30px, 4.5vw, 46px); line-height: 1.02;
+    color: var(--steel); margin-bottom: 16px;
+  }
+  .section .lead {
+    font-size: 17px; color: var(--gray-700); max-width: 720px;
+    margin-bottom: 40px;
+  }
+
+  /* ── ARTIFACT CARDS ───────────────────────────────── */
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
+  .card {
+    background: #fff; border: 1px solid var(--gray-100);
+    border-left: 3px solid var(--orange);
+    padding: 28px 30px; transition: transform 0.18s, box-shadow 0.18s;
+    display: flex; flex-direction: column;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(31,58,95,0.16); }
+  .card .tag {
+    font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase;
+    font-weight: 700; color: var(--gray-500); margin-bottom: 10px;
+  }
+  .card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; text-transform: uppercase;
+    font-size: 25px; color: var(--steel); margin-bottom: 8px; line-height: 1.05;
+  }
+  .card p { font-size: 14px; color: var(--gray-700); margin-bottom: 18px; flex: 1; }
+  .card .go {
+    font-size: 13px; font-weight: 600; color: var(--orange);
+    letter-spacing: 0.02em; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .card .go::after { content: '→'; transition: transform 0.15s; }
+  .card:hover .go::after { transform: translateX(4px); }
+  .card.primary { border-left-color: var(--steel); background: var(--steel); }
+  .card.primary .tag { color: rgba(244,242,238,0.55); }
+  .card.primary h3 { color: #fff; }
+  .card.primary p { color: var(--gray-300); }
+  .card.primary .go { color: var(--orange); }
+
+  /* ── AT-A-GLANCE STRIP ────────────────────────────── */
+  .glance {
+    background: var(--steel); color: var(--light);
+    padding: 60px 32px;
+  }
+  .glance-inner { max-width: 1080px; margin: 0 auto; }
+  .glance h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; text-transform: uppercase; font-size: 34px;
+    margin-bottom: 30px;
+  }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  .stat { border-left: 2.5px solid var(--orange); padding-left: 16px; }
+  .stat .n {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900; font-size: 40px; line-height: 1; color: #fff;
+  }
+  .stat .l {
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--gray-300); margin-top: 6px;
+  }
+
+  /* ── FOOTER ───────────────────────────────────────── */
+  .footer {
+    background: var(--ink); color: var(--gray-500);
+    padding: 40px 32px; text-align: center; font-size: 13px;
+    border-top: 4px solid var(--orange);
+  }
+  .footer .line1 { color: var(--gray-300); margin-bottom: 8px; }
+  .footer a { color: var(--orange); }
+</style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="brand">TOONE <span>CONSTRUCTION</span></div>
+    <div class="links">
+      <a href="#proposal">Proposal</a>
+      <a href="#operating-system">Marketing OS</a>
+      <a href="#glance">At a Glance</a>
+    </div>
+  </nav>
+
+  <div class="demo-banner">
+    Demonstration case study — Toone Construction Co. is a fictional company used to showcase a digital engagement.
+  </div>
+
+  <header class="hero">
+    <div class="eyebrow">Digital Engagement Proposal · 2026</div>
+    <h1>Toone Construction<span class="co">Co.</span></h1>
+    <p class="sub">
+      A 90-day program for a Utah commercial &amp; civil general contractor: one refreshed brand,
+      one production website, local SEO, and a Marketing Operating System the team runs in 15 minutes a day.
+    </p>
+    <div class="meta">
+      <span><b>Est. 1990</b> · 35 years</span>
+      <span><b>Commercial + Civil</b> GC</span>
+      <span><b>Wasatch Front</b>, Utah</span>
+    </div>
+  </header>
+
+  <!-- PROPOSAL -->
+  <section class="section" id="proposal">
+    <div class="section-label">The Proposal</div>
+    <h2>Read the full plan</h2>
+    <p class="lead">
+      The complete strategic proposal and a one-page executive leave-behind. Both cover brand,
+      web, SEO, social, the Marketing Operating System, pricing, and the 90-day timeline.
+    </p>
+    <div class="cards">
+      <a class="card primary" href="outputs/toone_construction_proposal.pdf" target="_blank">
+        <div class="tag">PDF · 17 pages</div>
+        <h3>Full Proposal</h3>
+        <p>The complete engagement: opportunity analysis, brand &amp; web strategy, SEO, social, the Marketing Operating System, investment, and timeline.</p>
+        <span class="go">Open the proposal</span>
+      </a>
+      <a class="card" href="outputs/toone_construction_one_pager.pdf" target="_blank">
+        <div class="tag">PDF · 1 page</div>
+        <h3>Executive Summary</h3>
+        <p>The whole engagement on a single page — what we build, what you own, pricing, and the next step. Designed to email or hand over.</p>
+        <span class="go">Open the one-pager</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- MARKETING OS -->
+  <section class="section" id="operating-system" style="padding-top:0;">
+    <div class="section-label">The Marketing Operating System</div>
+    <h2>See the system working</h2>
+    <p class="lead">
+      A superintendent texts photos and a short note from a jobsite. Five specialized agents draft
+      brand-voice posts, replies, pages, and lead alerts. The office manager taps approve — nothing
+      publishes without a click. Explore the architecture, a day in the life, and real generated output.
+    </p>
+    <div class="cards">
+      <a class="card" href="marketing-os/diagram.html" target="_blank">
+        <div class="tag">Interactive</div>
+        <h3>Architecture</h3>
+        <p>Five agents, one approval queue. The full pipeline from text-in to published artifact, with the three-phase ownership transfer.</p>
+        <span class="go">View architecture</span>
+      </a>
+      <a class="card" href="marketing-os/day.html" target="_blank">
+        <div class="tag">Interactive</div>
+        <h3>A Day in the Life</h3>
+        <p>Hour by hour through a normal week — who touches the system, when, and for how long.</p>
+        <span class="go">Walk through a day</span>
+      </a>
+      <a class="card" href="marketing-os/sample.html" target="_blank">
+        <div class="tag">Real output</div>
+        <h3>Sample Output</h3>
+        <p>Actual generated drafts in Toone voice from a single superintendent text-in — posts, a review reply, an SEO page, and a lead alert.</p>
+        <span class="go">See the output</span>
+      </a>
+      <a class="card" href="marketing-os/mock.html" target="_blank">
+        <div class="tag">Live demo</div>
+        <h3>Interactive Mock</h3>
+        <p>Click through the actual approval queue interface the office manager would use every day.</p>
+        <span class="go">Try the mock</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- AT A GLANCE -->
+  <section class="glance" id="glance">
+    <div class="glance-inner">
+      <h2>The engagement at a glance</h2>
+      <div class="stats">
+        <div class="stat">
+          <div class="n">$65,200</div>
+          <div class="l">Combined build · one-time</div>
+        </div>
+        <div class="stat">
+          <div class="n">90</div>
+          <div class="l">Days to launch</div>
+        </div>
+        <div class="stat">
+          <div class="n">5</div>
+          <div class="l">Marketing OS agents</div>
+        </div>
+        <div class="stat">
+          <div class="n">15<span style="font-size:20px;">min</span></div>
+          <div class="l">Per day to run it</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="line1">Prepared for <strong style="color:var(--light)">Toone Construction Co.</strong> &middot; Confidential demonstration case study.</div>
+    <div>&copy; 2026&nbsp; JTC Communications &amp; Consulting, LLC and Coolnerd, LLC</div>
+  </footer>
+
+</body>
+</html>
